@@ -77,6 +77,14 @@ export default function RiskReversal() {
           </div>
         </div>
       </div>
+
+       <div className="md:w-1/2 relative bg-slate-100 h-full container">
+              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
+                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
+                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
+              </div>
+           </div>
     </section>
   );
 }

@@ -1,8 +1,20 @@
+'use client'
 import styles from "./RealitySection.module.css";
+import Image from "next/image";
 
 export default function RealitySection() {
   return (
-    <section className={`section-dark ${styles.section}`}>
+    <section className={`section-dark ${styles.section} container`}>
+        <div className="md:w-1/2 relative bg-slate-100 h-full">
+              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
+                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
+                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
+              </div>
+           </div>
+
+
+
       <div className="container">
         <span className={`eyebrow eyebrow-green text-center `} style={{ display: "block" }}>
           Applying for a Visa?
@@ -34,7 +46,7 @@ export default function RealitySection() {
         </p>
 
         {/* Real Client Proof — WhatsApp Screenshot Mockup */}
-        <div className="wa-chat-mockup">
+        {/* <div className="wa-chat-mockup">
           <div className="wa-chat-header">
             <div className="wa-chat-avatar">AD</div>
             <div className="wa-chat-user">
@@ -50,7 +62,15 @@ export default function RealitySection() {
             Congratulations Daniel! We are absolutely thrilled to hear that. Best of luck as you start your classes! 🇨🇦✈️
             <div className="wa-time">11:18 AM</div>
           </div>
-        </div>
+        </div> */}
+
+          <div className="md:w-1/2 relative bg-slate-100 h-full container">
+              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
+                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
+                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
+              </div>
+           </div>
 
         {/* Stats row */}
         <div className={styles.statsRow}>
