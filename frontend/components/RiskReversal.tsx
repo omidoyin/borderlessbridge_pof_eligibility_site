@@ -1,3 +1,4 @@
+"use client";
 import styles from "./RiskReversal.module.css";
 
 const commitments = [
