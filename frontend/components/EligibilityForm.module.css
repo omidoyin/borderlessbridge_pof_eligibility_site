@@ -1,0 +1,226 @@
+.section {
+  padding: 4rem 0 6rem;
+  background: #050811;
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0), #f59e0b, rgba(245, 158, 11, 0));
+}
+
+/* Authority line */
+.authorityLine {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(245, 158, 11, 0.05);
+  color: #f9fafb;
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.authorityIcon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+}
+
+.authorityLine p {
+  color: #f9fafb;
+  margin: 0;
+}
+
+.authorityLine strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Form card */
+.formCard {
+  background: #0a101f;
+  border-radius: 24px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.formHeader {
+  background: #080d1a;
+  padding: 2.25rem 2rem 2rem;
+  border-bottom: 4px solid #f59e0b;
+}
+
+.formTitle {
+  color: #ffffff;
+  margin: 0.35rem 0 0.5rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.formSub {
+  font-size: 0.87rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.form {
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fieldHint {
+  font-weight: 400;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: none;
+  font-size: 1.1rem;
+  padding: 1.2rem;
+  justify-content: center;
+  cursor: pointer;
+  background: #f59e0b;
+  color: #050811;
+  font-weight: 700;
+  border-radius: 9999px;
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #fbbf24;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.45);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(5, 8, 17, 0.25);
+  border-top-color: #050811;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Privacy note */
+.privacy {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+/* Error banner */
+.errorBanner {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #ef4444;
+  line-height: 1.5;
+}
+
+/* Success card */
+.successCard {
+  background: #0a101f;
+  border-radius: 24px;
+  padding: 4rem 2rem;
+  text-align: center;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  animation: spin 0.5s ease both; /* using custom check animations if defined */
+}
+
+.successTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.successText {
+  font-size: 1.05rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  max-width: 420px;
+}
+
+.waBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  background: #25D366;
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+  padding: 1.1rem 2.25rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.waBtn:hover {
+  background: #1ebe5d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+}
+
+@media (max-width: 520px) {
+  .formHeader { padding: 1.75rem 1.25rem; }
+  .form { padding: 1.75rem 1.25rem; }
+  .successCard { padding: 3rem 1.25rem; }
+}
+
