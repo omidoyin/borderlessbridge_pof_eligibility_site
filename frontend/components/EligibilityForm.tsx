@@ -6,16 +6,25 @@ interface FormData {
   fullName: string;
   email: string;
   phone: string;
+  nationality: string;
   destination: string;
   visaType: string;
   timeline: string;
+  knowsPofAmount: string;
+  pofAmount: string;
+  lettersReceived: string[];
+  accessToFunds: string;
+  applyingWithin30Days: string;
+  priorRefusal: string;
+  heardFrom: string;
+  additionalInfo: string;
 }
 
 interface FieldErrors {
   [key: string]: string;
 }
 
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2348000000000";
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2348149517851";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 const WHATSAPP_MESSAGE = encodeURIComponent(
@@ -27,9 +36,18 @@ export default function EligibilityForm() {
     fullName: "",
     email: "",
     phone: "",
+    nationality: "",
     destination: "",
     visaType: "",
     timeline: "",
+    knowsPofAmount: "",
+    pofAmount: "",
+    lettersReceived: [],
+    accessToFunds: "",
+    applyingWithin30Days: "",
+    priorRefusal: "",
+    heardFrom: "",
+    additionalInfo: "",
   });
 
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -42,28 +60,67 @@ export default function EligibilityForm() {
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
       e.email = "Please enter a valid email address.";
     if (!form.phone.trim() || form.phone.trim().length < 7)
-      e.phone = "Please enter a valid WhatsApp number.";
-    if (!form.destination.trim())
-      e.destination = "Please enter your destination country.";
+      e.phone = "Please enter your WhatsApp number (with country code).";
+    if (!form.nationality.trim())
+      e.nationality = "Please enter your nationality.";
+    if (!form.destination)
+      e.destination = "Please select your destination country.";
     if (!form.visaType)
       e.visaType = "Please select your visa type.";
     if (!form.timeline)
-      e.timeline = "Please select your application timeline.";
+      e.timeline = "Please select your intended application timeline.";
+    if (!form.knowsPofAmount)
+      e.knowsPofAmount = "Please select an option.";
+    if (form.knowsPofAmount === "yes" && !form.pofAmount.trim())
+      e.pofAmount = "Please specify the Proof of Funds amount required.";
+    if (!form.accessToFunds)
+      e.accessToFunds = "Please select an option.";
+    if (!form.applyingWithin30Days)
+      e.applyingWithin30Days = "Please select an option.";
+    if (!form.priorRefusal)
+      e.priorRefusal = "Please select an option.";
+    if (!form.heardFrom)
+      e.heardFrom = "Please let us know how you heard about us.";
+
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  const handleCheckboxChange = (value: string) => {
+    setForm((prev) => {
+      let updated = [...prev.lettersReceived];
+      if (value === "None Yet") {
+        updated = ["None Yet"];
+      } else {
+        updated = updated.filter((item) => item !== "None Yet");
+        if (updated.includes(value)) {
+          updated = updated.filter((item) => item !== value);
+        } else {
+          updated.push(value);
+        }
+      }
+      return { ...prev, lettersReceived: updated };
+    });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      // Scroll to the first error
+      const firstError = Object.keys(errors)[0];
+      if (firstError) {
+        document.getElementsByName(firstError)[0]?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
 
     setStatus("loading");
 
@@ -170,111 +227,345 @@ export default function EligibilityForm() {
           </div>
 
           <form onSubmit={handleSubmit} noValidate className={styles.form} id="pof-eligibility-form">
-            {/* Full Name */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="fullName">Full Name</label>
-              <input
-                id="fullName"
-                name="fullName"
-                type="text"
-                className={`form-control ${errors.fullName ? "error" : ""}`}
-                placeholder="e.g. Amara Johnson"
-                value={form.fullName}
-                onChange={handleChange}
-                autoComplete="name"
-              />
-              {errors.fullName && <span className="form-error">{errors.fullName}</span>}
-            </div>
-
-            {/* Email */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">Email Address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                className={`form-control ${errors.email ? "error" : ""}`}
-                placeholder="you@example.com"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="email"
-              />
-              {errors.email && <span className="form-error">{errors.email}</span>}
-            </div>
-
-            {/* Phone */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="phone">
-                WhatsApp Number
-                <span className={styles.fieldHint}> (with country code)</span>
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                className={`form-control ${errors.phone ? "error" : ""}`}
-                placeholder="+234 800 000 0000"
-                value={form.phone}
-                onChange={handleChange}
-                autoComplete="tel"
-              />
-              {errors.phone && <span className="form-error">{errors.phone}</span>}
-            </div>
-
-            {/* Destination */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="destination">Destination Country</label>
-              <input
-                id="destination"
-                name="destination"
-                type="text"
-                className={`form-control ${errors.destination ? "error" : ""}`}
-                placeholder="e.g. Canada, UK, Germany"
-                value={form.destination}
-                onChange={handleChange}
-              />
-              {errors.destination && <span className="form-error">{errors.destination}</span>}
-            </div>
-
-            {/* Visa Type */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="visaType">Visa Type</label>
-              <div className="select-wrapper">
-                <select
-                  id="visaType"
-                  name="visaType"
-                  className={`form-control ${errors.visaType ? "error" : ""}`}
-                  value={form.visaType}
+            
+            {/* SECTION 1: PERSONAL INFORMATION */}
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>1. Personal Information</h3>
+              
+              <div className="form-group">
+                <label className="form-label" htmlFor="fullName">Full Name</label>
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  className={`form-control ${errors.fullName ? "error" : ""}`}
+                  placeholder="e.g. Amara Johnson"
+                  value={form.fullName}
                   onChange={handleChange}
-                >
-                  <option value="">Select visa type...</option>
-                  <option value="study">Study</option>
-                  <option value="work">Work</option>
-                  <option value="travel">Travel/Tourist</option>
-                </select>
+                  autoComplete="name"
+                />
+                {errors.fullName && <span className="form-error">{errors.fullName}</span>}
               </div>
-              {errors.visaType && <span className="form-error">{errors.visaType}</span>}
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className={`form-control ${errors.email ? "error" : ""}`}
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                />
+                {errors.email && <span className="form-error">{errors.email}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="phone">
+                  WhatsApp Number
+                  <span className={styles.fieldHint}> (with country code)</span>
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  className={`form-control ${errors.phone ? "error" : ""}`}
+                  placeholder="+234 800 000 0000"
+                  value={form.phone}
+                  onChange={handleChange}
+                  autoComplete="tel"
+                />
+                {errors.phone && <span className="form-error">{errors.phone}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="nationality">Nationality</label>
+                <input
+                  id="nationality"
+                  name="nationality"
+                  type="text"
+                  className={`form-control ${errors.nationality ? "error" : ""}`}
+                  placeholder="e.g. Nigerian, Ghanaian"
+                  value={form.nationality}
+                  onChange={handleChange}
+                />
+                {errors.nationality && <span className="form-error">{errors.nationality}</span>}
+              </div>
             </div>
 
-            {/* Timeline */}
-            <div className="form-group">
-              <label className="form-label" htmlFor="timeline">Application Timeline</label>
-              <div className="select-wrapper">
-                <select
-                  id="timeline"
-                  name="timeline"
-                  className={`form-control ${errors.timeline ? "error" : ""}`}
-                  value={form.timeline}
-                  onChange={handleChange}
-                >
-                  <option value="">When are you applying?</option>
-                  <option value="within_1_month">Within 1 month</option>
-                  <option value="1_3_months">1-3 months</option>
-                  <option value="3_6_months">3-6 months</option>
-                  <option value="just_planning">Just planning</option>
-                </select>
+            {/* SECTION 2: APPLICATION DETAILS */}
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>2. Application Details</h3>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="destination">Destination Country</label>
+                <div className="select-wrapper">
+                  <select
+                    id="destination"
+                    name="destination"
+                    className={`form-control ${errors.destination ? "error" : ""}`}
+                    value={form.destination}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select country...</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                    <option value="USA">USA</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Ireland">Ireland</option>
+                    <option value="France">France</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {errors.destination && <span className="form-error">{errors.destination}</span>}
               </div>
-              {errors.timeline && <span className="form-error">{errors.timeline}</span>}
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="visaType">Visa Type</label>
+                <div className="select-wrapper">
+                  <select
+                    id="visaType"
+                    name="visaType"
+                    className={`form-control ${errors.visaType ? "error" : ""}`}
+                    value={form.visaType}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select visa type...</option>
+                    <option value="student">Student Visa</option>
+                    <option value="work">Work Visa</option>
+                    <option value="tourist">Tourist Visa</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                {errors.visaType && <span className="form-error">{errors.visaType}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="timeline">Intended Application Date</label>
+                <div className="select-wrapper">
+                  <select
+                    id="timeline"
+                    name="timeline"
+                    className={`form-control ${errors.timeline ? "error" : ""}`}
+                    value={form.timeline}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select timeline...</option>
+                    <option value="within_30_days">Within 30 Days</option>
+                    <option value="1_3_months">1–3 Months</option>
+                    <option value="3_6_months">3–6 Months</option>
+                    <option value="more_than_6_months">More Than 6 Months</option>
+                  </select>
+                </div>
+                {errors.timeline && <span className="form-error">{errors.timeline}</span>}
+              </div>
+            </div>
+
+            {/* SECTION 3: PROOF OF FUNDS REQUIREMENTS */}
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>3. Proof of Funds Requirements</h3>
+
+              <div className="form-group">
+                <label className="form-label">Do you already know the Proof of Funds amount required?</label>
+                <div className={styles.radioGroup}>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="knowsPofAmount"
+                      value="yes"
+                      checked={form.knowsPofAmount === "yes"}
+                      onChange={handleChange}
+                    />
+                    <span>Yes</span>
+                  </label>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="knowsPofAmount"
+                      value="no"
+                      checked={form.knowsPofAmount === "no"}
+                      onChange={handleChange}
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+                {errors.knowsPofAmount && <span className="form-error">{errors.knowsPofAmount}</span>}
+              </div>
+
+              {form.knowsPofAmount === "yes" && (
+                <div className="form-group animate-fade">
+                  <label className="form-label" htmlFor="pofAmount">What amount is required?</label>
+                  <input
+                    id="pofAmount"
+                    name="pofAmount"
+                    type="text"
+                    className={`form-control ${errors.pofAmount ? "error" : ""}`}
+                    placeholder="e.g. Can$21,000 or £12,000"
+                    value={form.pofAmount}
+                    onChange={handleChange}
+                  />
+                  {errors.pofAmount && <span className="form-error">{errors.pofAmount}</span>}
+                </div>
+              )}
+
+              <div className="form-group">
+                <label className="form-label">Have you received any of the following?</label>
+                <div className={styles.checkboxGrid}>
+                  {[
+                    "School Admission Letter",
+                    "CAS Letter",
+                    "Job Offer Letter",
+                    "Invitation Letter",
+                    "None Yet",
+                  ].map((option) => (
+                    <label key={option} className={styles.checkboxOption}>
+                      <input
+                        type="checkbox"
+                        checked={form.lettersReceived.includes(option)}
+                        onChange={() => handleCheckboxChange(option)}
+                      />
+                      <span>{option}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Do you currently have access to the required funds?</label>
+                <div className={styles.radioGroup}>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="accessToFunds"
+                      value="yes_fully"
+                      checked={form.accessToFunds === "yes_fully"}
+                      onChange={handleChange}
+                    />
+                    <span>Yes, fully</span>
+                  </label>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="accessToFunds"
+                      value="partially"
+                      checked={form.accessToFunds === "partially"}
+                      onChange={handleChange}
+                    />
+                    <span>Partially</span>
+                  </label>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="accessToFunds"
+                      value="no"
+                      checked={form.accessToFunds === "no"}
+                      onChange={handleChange}
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+                {errors.accessToFunds && <span className="form-error">{errors.accessToFunds}</span>}
+              </div>
+            </div>
+
+            {/* SECTION 4: QUALIFICATION QUESTIONS */}
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>4. Qualification Questions</h3>
+
+              <div className="form-group">
+                <label className="form-label">Are you actively preparing your application for submission within the next 30 days?</label>
+                <div className={styles.radioGroup}>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="applyingWithin30Days"
+                      value="yes"
+                      checked={form.applyingWithin30Days === "yes"}
+                      onChange={handleChange}
+                    />
+                    <span>Yes</span>
+                  </label>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="applyingWithin30Days"
+                      value="no"
+                      checked={form.applyingWithin30Days === "no"}
+                      onChange={handleChange}
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+                {errors.applyingWithin30Days && <span className="form-error">{errors.applyingWithin30Days}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Have you ever had a visa refusal before?</label>
+                <div className={styles.radioGroup}>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="priorRefusal"
+                      value="yes"
+                      checked={form.priorRefusal === "yes"}
+                      onChange={handleChange}
+                    />
+                    <span>Yes</span>
+                  </label>
+                  <label className={styles.radioOption}>
+                    <input
+                      type="radio"
+                      name="priorRefusal"
+                      value="no"
+                      checked={form.priorRefusal === "no"}
+                      onChange={handleChange}
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+                {errors.priorRefusal && <span className="form-error">{errors.priorRefusal}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="heardFrom">How did you hear about us?</label>
+                <div className="select-wrapper">
+                  <select
+                    id="heardFrom"
+                    name="heardFrom"
+                    className={`form-control ${errors.heardFrom ? "error" : ""}`}
+                    value={form.heardFrom}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select option...</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Google">Google</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {errors.heardFrom && <span className="form-error">{errors.heardFrom}</span>}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="additionalInfo">
+                  Additional Information
+                  <span className={styles.fieldHint}> (Optional)</span>
+                </label>
+                <textarea
+                  id="additionalInfo"
+                  name="additionalInfo"
+                  className="form-control"
+                  rows={4}
+                  placeholder="Share any details or questions that can help us evaluate your profile..."
+                  value={form.additionalInfo}
+                  onChange={handleChange}
+                  style={{ resize: "vertical" }}
+                />
+              </div>
             </div>
 
             {/* Error banner */}
