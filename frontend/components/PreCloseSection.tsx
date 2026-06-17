@@ -80,7 +80,7 @@ export default function PreCloseSection() {
         {/* Bridge text → form */}
         <div className={styles.bridge}>
           <p className={styles.bridgeText}>
-            If that&apos;s you, complete the quick eligibility check below.
+            If that&apos;s you, congratulations, you&apos;re a step ahead.  complete the quick eligibility check below.
           </p>
           <button
             id="pre-close-cta"

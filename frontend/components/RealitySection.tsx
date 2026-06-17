@@ -1,9 +1,14 @@
+'use client'
 import styles from "./RealitySection.module.css";
 
 export default function RealitySection() {
   return (
     <section className={`section-dark ${styles.section}`}>
       <div className="container">
+         <div style={{marginBottom: '2rem'}}>
+              <img src="/Testimonial_Barry.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
+              
+           </div>
         {/* <span className={`eyebrow text-center`} style={{ display: "block" }}>
           The Cost of Failure
         </span> */}

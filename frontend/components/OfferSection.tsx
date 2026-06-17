@@ -25,7 +25,7 @@ const items = [
 export default function OfferSection() {
   return (
     <section className="section">
-      <div className="container">
+      <div className="container" >
         {/* Header */}
         <div className={`${styles.header} `} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
           {/* <span className="eyebrow">Portfolio</span> */}
@@ -39,7 +39,7 @@ export default function OfferSection() {
         
 
         {/* Items list */}
-        <div className={styles.list}>
+        <div className={styles.list} >
           {items.map((item, i) => (
             <div className={styles.item} key={item.title}>
               <div className={styles.number}>0{i + 1}</div>

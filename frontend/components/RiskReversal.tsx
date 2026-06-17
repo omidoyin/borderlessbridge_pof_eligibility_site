@@ -36,6 +36,10 @@ export default function RiskReversal() {
   return (
     <section className={styles.section}>
       <div className="container">
+         <div style={{ marginBottom: "2rem"}}>
+              <img src="/Testimonial_Barry.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
+              
+           </div>
         <div className={styles.inner}>
           {/* Header */}
           <div className={styles.header}>
@@ -71,7 +75,7 @@ export default function RiskReversal() {
             </h2>
 
             {/* Testimonial card */}
-            <div className={styles.quoteCard}>
+            {/* <div className={styles.quoteCard}>
               <div className={styles.quoteProfile}>
                 <div className={styles.quotePhoto}>
                   <span>BJ</span>
@@ -84,10 +88,10 @@ export default function RiskReversal() {
               <p className={styles.quoteText}>
                 &ldquo;I had a great experience with BorderlessBridge. The documentation was 100% accurate, easy to understand, and highly professional. Gained my visa without tying up my family savings.&rdquo;
               </p>
-            </div>
+            </div> */}
 
             {/* Executive Authority block */}
-            <div className={styles.authorityBlock}>
+            {/* <div className={styles.authorityBlock}>
               <p className={styles.authorityLabel}>Vetted under the supervision of:</p>
               <div className={styles.authorityCard}>
                 <div className={styles.authorityHeader}>
@@ -101,7 +105,7 @@ export default function RiskReversal() {
                   &ldquo;We built BorderlessBridge because we saw too many qualified applicants lose their relocation opportunities simply because they didn&apos;t structure their proof of funds correctly. We treat your application with the same precision we would use for our own family.&rdquo;
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Reassurance line */}
