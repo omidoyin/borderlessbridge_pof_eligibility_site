@@ -156,11 +156,10 @@ export default function EligibilityForm() {
           <div className={styles.formHeader}>
             <span className="eyebrow">Eligibility Assessment</span>
             <h2 className={`heading-md ${styles.formTitle}`}>
-              Check My Eligibility
+              Complete Your Eligibility Assessment
             </h2>
             <p className={styles.formSub}>
-              Takes 60 seconds. A specialist will review and contact you within
-              24 hours.
+              Takes 60 seconds. A specialist will review and contact you on WhatsApp within 24 hours.
             </p>
             <div className="rating-row" style={{ marginTop: "0.6rem", gap: "0.4rem" }}>
               <div className="rating-stars" style={{ fontSize: "0.9rem" }}>
@@ -249,10 +248,9 @@ export default function EligibilityForm() {
                   onChange={handleChange}
                 >
                   <option value="">Select visa type...</option>
-                  <option value="study">Study Visa</option>
-                  <option value="work">Work Visa</option>
-                  <option value="travel">Travel / Tourist Visa</option>
-                  <option value="other">Other</option>
+                  <option value="study">Study</option>
+                  <option value="work">Work</option>
+                  <option value="travel">Travel/Tourist</option>
                 </select>
               </div>
               {errors.visaType && <span className="form-error">{errors.visaType}</span>}
@@ -270,10 +268,10 @@ export default function EligibilityForm() {
                   onChange={handleChange}
                 >
                   <option value="">When are you applying?</option>
-                  <option value="within_1_month">Within the next month</option>
-                  <option value="1_3_months">1 – 3 months</option>
-                  <option value="3_6_months">3 – 6 months</option>
-                  <option value="6_plus_months">6+ months</option>
+                  <option value="within_1_month">Within 1 month</option>
+                  <option value="1_3_months">1-3 months</option>
+                  <option value="3_6_months">3-6 months</option>
+                  <option value="just_planning">Just planning</option>
                 </select>
               </div>
               {errors.timeline && <span className="form-error">{errors.timeline}</span>}
@@ -301,17 +299,13 @@ export default function EligibilityForm() {
                 </>
               ) : (
                 <>
-                  Get My Assessment
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  Submit & Connect on WhatsApp ⚡
                 </>
               )}
             </button>
 
             <p className={styles.privacy}>
-              🔒 Your information is handled with strict confidentiality and
-              never shared with third parties.
+              🔒 Your information is handled with strict confidentiality and never shared with third parties. This service provides documentation support only and does not guarantee visa approval.
             </p>
           </form>
         </div>

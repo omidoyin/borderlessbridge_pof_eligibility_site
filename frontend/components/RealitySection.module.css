@@ -97,3 +97,54 @@
   .stat:last-child { border-bottom: none; padding-left: 0; }
   .stat:not(:first-child):not(:last-child) { padding-left: 0; }
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.listItemIcon {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.listItemContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.listItemTitle {
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.listItemDesc {
+  font-size: 0.92rem;
+  color: #cbd5e1;
+}
+
+.callout {
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 4px solid #f59e0b;
+  padding: 1.25rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 2rem 0;
+}
+
+.calloutText {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #f9fafb;
+  line-height: 1.6;
+}
+

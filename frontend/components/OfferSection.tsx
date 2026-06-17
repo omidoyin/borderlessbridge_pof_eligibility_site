@@ -2,24 +2,23 @@ import styles from "./OfferSection.module.css";
 
 const items = [
   {
-    title: "Full Proof of Funds Support",
-    desc: "End-to-end preparation of your embassy-ready POF documentation.",
+    title: "Complete Embassy-Ready POF",
+    desc: "End-to-end preparation of legally backed, verifiable POF that meets strict immigration standards.",
   },
   {
     title: "Free Consultation",
-    desc: "No-cost initial call to understand your situation and visa requirements.",
-  },
+    desc: "No-cost initial call to understand your situation and visa requirements."},
   {
-    title: "Country-Specific Guidance",
-    desc: "Tailored advice based on the exact embassy and destination you're applying to.",
+    title: "Country-Specific Policy Alignment",
+    desc: "Tailored structuring based on the exact current rules of your destination country (whether it’s Canada's IRCC, UKVI, or European alternatives).",
   },
   {
     title: "Documentation Review",
-    desc: "We review your documents before submission to catch any issues early.",
+    desc: "A rigorous review of your financial profile before you hit submit to catch and eliminate red flags early.",
   },
   {
-    title: "Dedicated WhatsApp Support",
-    desc: "Direct access to your assigned specialist via WhatsApp throughout the process.",
+    title: "Priority WhatsApp Hotline",
+    desc: "Direct, continuous access to your assigned specialist on WhatsApp so you can get fast answers whenever you have questions.",
   },
 ];
 
@@ -28,16 +27,16 @@ export default function OfferSection() {
     <section className="section">
       <div className="container">
         {/* Header */}
-        <div className={styles.header}>
-          <span className="eyebrow">What You Get</span>
+        <div className={`${styles.header} `} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+          {/* <span className="eyebrow">Portfolio</span> */}
           <h2 className={`heading-lg ${styles.heading}`}>
-            Everything you need to meet embassy standards
+            What you get
           </h2>
           <p className={styles.intro}>
-            We handle the complexity so you can focus on preparing for your
-            new chapter. Here&apos;s exactly what&apos;s included:
+            We handle the administrative complexity so you can focus on packing your bags.
           </p>
         </div>
+        
 
         {/* Items list */}
         <div className={styles.list}>
@@ -70,3 +69,4 @@ export default function OfferSection() {
     </section>
   );
 }
+
