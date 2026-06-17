@@ -1,76 +1,61 @@
 'use client'
 import styles from "./RealitySection.module.css";
-import Image from "next/image";
 
 export default function RealitySection() {
   return (
-    <section className={`section-dark ${styles.section} container`}>
-        <div className="md:w-1/2 relative bg-slate-100 h-full">
-              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
-                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
-                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
-              </div>
-           </div>
-
-
-
+    <section className={`section-dark ${styles.section}`}>
       <div className="container">
-        <span className={`eyebrow eyebrow-green text-center `} style={{ display: "block" }}>
-          Applying for a Visa?
-        </span>
+         <div style={{marginBottom: '2rem'}}>
+              <img src="/Testimonial_Barry.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
+              
+           </div>
+        {/* <span className={`eyebrow text-center`} style={{ display: "block" }}>
+          The Cost of Failure
+        </span> */}
 
         <h2 className={`heading-lg ${styles.headline}`}>
           Your financial documentation is one of the first things an embassy reviews.
         </h2>
 
-        <div className={styles.warningCard}>
-          <div className={styles.warningIcon}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-          </div>
-          <p className={styles.warningText}>
-            <strong>THE BRUTAL TRUTH:</strong> A poorly prepared Proof of Funds can{" "}
-            <strong>delay your application</strong>, create unnecessary questions,
-            or <strong>weaken an otherwise strong file.</strong>
-          </p>
-        </div>
-
         <p className={styles.solution}>
-          That&apos;s why we help serious applicants prepare embassy-ready Proof of Funds
-          documentation through a <em>clear, structured process</em> — so your
-          visa file speaks for itself.
+          A visa application isn&apos;t just paperwork—it’s your future. Yet, thousands of brilliant applicants get rejected every year for one single reason: unverified, poorly structured, or questionable financial documentation.
         </p>
 
-        {/* Real Client Proof — WhatsApp Screenshot Mockup */}
-        {/* <div className="wa-chat-mockup">
-          <div className="wa-chat-header">
-            <div className="wa-chat-avatar">AD</div>
-            <div className="wa-chat-user">
-              <span className="wa-chat-name">Akande Daniel</span>
-              <span className="wa-chat-status">Verified Visa Applicant</span>
+        <p className={styles.solution}>
+          Embassies are harsher than ever. If your Proof of Funds looks unbacked or suspicious, you face immediate, devastating consequences:
+        </p>
+
+        <div className={styles.list}>
+          <div className={styles.listItem}>
+            <span className={styles.listItemIcon}>❌</span>
+            <div className={styles.listItemContent}>
+              <h3 className={styles.listItemTitle}>Denied Visas & Forfeited Fees</h3>
+              <p className={styles.listItemDesc}>Your embassy fees, school deposits, and application expenses? Gone. You start back at square one with a refusal on your record.</p>
             </div>
           </div>
-          <div className="wa-bubble wa-bubble-client">
-            Hi BorderlessBridge, just wanted to say thank you! Got my Canada Study Visa approved today. The embassy had zero questions about my Proof of Funds. You saved my application! 🙏
-            <div className="wa-time">11:15 AM</div>
-          </div>
-          <div className="wa-bubble wa-bubble-agent">
-            Congratulations Daniel! We are absolutely thrilled to hear that. Best of luck as you start your classes! 🇨🇦✈️
-            <div className="wa-time">11:18 AM</div>
-          </div>
-        </div> */}
 
-          <div className="md:w-1/2 relative bg-slate-100 h-full container">
-              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
-                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
-                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
-              </div>
-           </div>
+          <div className={styles.listItem}>
+            <span className={styles.listItemIcon}>❌</span>
+            <div className={styles.listItemContent}>
+              <h3 className={styles.listItemTitle}>The &quot;Fake Agent&quot; Trap</h3>
+              <p className={styles.listItemDesc}>If you use shady, unverified bank statements from cheap internet vendors, embassy verification checks will flag them instantly.</p>
+            </div>
+          </div>
+
+          <div className={styles.listItem}>
+            <span className={styles.listItemIcon}>❌</span>
+            <div className={styles.listItemContent}>
+              <h3 className={styles.listItemTitle}>A Nightmare 5 to 10-Year Ban</h3>
+              <p className={styles.listItemDesc}>Being flagged for fraudulent documents doesn&apos;t just mean a rejection—it means a permanent blackmark and a multi-year ban from entering your target country.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.callout}>
+          <p className={styles.calloutText}>
+            &gt; Don&apos;t gamble with your relocation dreams just to save a few weeks or a few bucks. Do it right the first time.
+          </p>
+        </div>
 
         {/* Stats row */}
         <div className={styles.statsRow}>
@@ -89,3 +74,4 @@ export default function RealitySection() {
     </section>
   );
 }
+

@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TrustBar from "@/components/TrustBar";
 import RealitySection from "@/components/RealitySection";
+import ProcessSection from "@/components/ProcessSection";
 import OfferSection from "@/components/OfferSection";
 import RiskReversal from "@/components/RiskReversal";
 import PreCloseSection from "@/components/PreCloseSection";
@@ -19,23 +20,27 @@ export default function Home() {
         <HeroSection />
 
         {/* 2. Trust Bar */}
-        <TrustBar />
+        {/* <TrustBar /> */}
 
         {/* 3. Reality / Problem */}
         <RealitySection />
 
-        {/* 4. Offer / What you get */}
+        {/* 4. Process Blueprint / How it works */}
+        <ProcessSection />
+
+        {/* 5. Offer / What you get */}
         <OfferSection />
 
-        {/* 5. Risk Reversal / Commitment */}
+        {/* 6. Risk Reversal / Commitment */}
         <RiskReversal />
 
-        {/* 6. Pre-Close / Qualification */}
+        {/* 7. Pre-Close / Qualification */}
         <PreCloseSection />
 
-        {/* 7. Eligibility Form — the conversion point */}
+        {/* 8. Eligibility Form — the conversion point */}
         <EligibilityForm />
       </main>
+
 
       <Footer />
 

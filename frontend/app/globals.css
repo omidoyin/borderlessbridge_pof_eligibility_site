@@ -431,7 +431,7 @@ input, select, textarea { font-family: inherit; }
   width: 100%;
   padding: 0.85rem 1.1rem;
   background: #0c1424;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.34);
   border-radius: var(--radius-md);
   font-size: 1rem;
   color: #f9fafb;

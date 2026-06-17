@@ -3,16 +3,32 @@ import styles from "./RiskReversal.module.css";
 
 const commitments = [
   {
-    title: "Free Reprint For First Refusal",
-    desc: "If your application is refused on eligible grounds, we reprint your documentation at no extra charge.",
+    title: "100% Embassy-Verifiable Guarantee",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+    desc: "Every single document we support is authentic, legally backed, and ready for embassy verification checks. We never use unbacked statements.",
   },
   {
-    title: "Full Refund For Covered Procedural Fairness Issues",
-    desc: "If we make an error on our part that affects your application's fairness, you receive a full refund.",
+    title: "Complete Application Re-run Support",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+      </svg>
+    ),
+    desc: "In the rare event that an embassy requests a structural change or resubmissions on your financial files, our team will re-structure and re-issue your documentation at zero extra cost to ensure your next attempt is seamless.",
   },
   {
-    title: "Support Throughout Your Application Process",
-    desc: "Our commitment doesn't end at delivery. We stay available from submission to decision.",
+    title: "Total Accountability",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      </svg>
+    ),
+    desc: "If an application is rejected due to a clerical error on our part, we don't hide behind fine print. We will issue a full refund of our service fees. No hassles, no arguments.",
   },
 ];
 
@@ -20,16 +36,19 @@ export default function RiskReversal() {
   return (
     <section className={styles.section}>
       <div className="container">
+         <div style={{ marginBottom: "2rem"}}>
+              <img src="/Testimonial_Barry.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
+              
+           </div>
         <div className={styles.inner}>
           {/* Header */}
           <div className={styles.header}>
-            <span className="eyebrow eyebrow-green">Our Commitment To You</span>
+            <span className="eyebrow eyebrow-green">Guarantee</span>
             <h2 className={`heading-lg ${styles.heading}`}>
-              We stand behind our work — completely.
+              Our Risk-Free Success Guarantee
             </h2>
             <p className={styles.intro}>
-              We only work with applicants we can genuinely help. And when we
-              take on your case, we take full responsibility for our part.
+              Because we thoroughly vet every applicant before taking them on, we stand completely behind our documentation. We don’t just handle paperwork; we partner in your success.
             </p>
           </div>
 
@@ -38,9 +57,7 @@ export default function RiskReversal() {
             {commitments.map((c) => (
               <div className={styles.card} key={c.title}>
                 <div className={styles.shield}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
+                  {c.icon}
                 </div>
                 <div>
                   <h3 className={styles.cardTitle}>{c.title}</h3>
@@ -50,42 +67,59 @@ export default function RiskReversal() {
             ))}
           </div>
 
-          {/* High-Contrast quote card review */}
-          <div className={styles.quoteCard}>
-            <div className={styles.quoteProfile}>
-              <div className={styles.quotePhoto}>
-                <span>BJ</span>
+          {/* Section 7 - Social Proof & Executive Authority */}
+          <div className={styles.inner} style={{ marginTop: "4rem" }}>
+            {/* <span className="eyebrow">Social Proof & Executive Authority</span> */}
+            <h2 className={`heading-md`} style={{ color: "#ffffff", marginBottom: "1.5rem" }}>
+              Real Approvals. Real Experts.
+            </h2>
+
+            {/* Testimonial card */}
+            {/* <div className={styles.quoteCard}>
+              <div className={styles.quoteProfile}>
+                <div className={styles.quotePhoto}>
+                  <span>BJ</span>
+                </div>
+                <div className={styles.quoteUserInfo}>
+                  <h4 className={styles.quoteUserName}>Barry Jude</h4>
+                  <span className={styles.quoteUserStatus}>UK Student Visa Approved</span>
+                </div>
               </div>
-              <div className={styles.quoteUserInfo}>
-                <h4 className={styles.quoteUserName}>Barry Jude</h4>
-                <span className={styles.quoteUserStatus}>UK Student Visa Approved</span>
+              <p className={styles.quoteText}>
+                &ldquo;I had a great experience with BorderlessBridge. The documentation was 100% accurate, easy to understand, and highly professional. Gained my visa without tying up my family savings.&rdquo;
+              </p>
+            </div> */}
+
+            {/* Executive Authority block */}
+            {/* <div className={styles.authorityBlock}>
+              <p className={styles.authorityLabel}>Vetted under the supervision of:</p>
+              <div className={styles.authorityCard}>
+                <div className={styles.authorityHeader}>
+                  <div className={styles.authorityAvatar}>OA</div>
+                  <div className={styles.authorityMeta}>
+                    <h4 className={styles.authorityName}>Omidoyin Ayodeji</h4>
+                    <span className={styles.authorityTitle}>Head of Documentation & Compliance, BorderlessBridge</span>
+                  </div>
+                </div>
+                <p className={styles.authorityQuote}>
+                  &ldquo;We built BorderlessBridge because we saw too many qualified applicants lose their relocation opportunities simply because they didn&apos;t structure their proof of funds correctly. We treat your application with the same precision we would use for our own family.&rdquo;
+                </p>
               </div>
-            </div>
-            <p className={styles.quoteText}>
-              &ldquo;I had a great experience with BorderlessBridge. The documentation was 100% accurate, easy to understand, and highly professional. Gained my visa without tying up my family savings.&rdquo;
-            </p>
+            </div> */}
           </div>
 
           {/* Reassurance line */}
-          <div className={styles.reassurance}>
+          <div className={styles.reassurance} style={{ marginTop: "3rem" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
             <p>
-              No hidden conditions. No fine print traps. Just a straightforward
-              commitment to doing right by our clients.
+              No hidden conditions. No fine print traps. Just a straightforward commitment to doing right by our clients.
             </p>
           </div>
         </div>
       </div>
-
-       <div className="md:w-1/2 relative bg-slate-100 h-full container">
-              <img src="/Testimonial_Barry.jpeg" alt="Lead Trainer Omidoyin Ayodeji" className=" inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.src = "https://i.pravatar.cc/300?u=ayodeji" }} />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent p-6 text-white">
-                 <h3 className="text-xl font-serif font-black leading-tight uppercase">Barry</h3>
-                 <p className="text-orange-500 font-black uppercase tracking-widest text-[9px]">Cohort 2 Student</p>
-              </div>
-           </div>
     </section>
   );
 }
+

@@ -3,16 +3,16 @@
 import styles from "./PreCloseSection.module.css";
 
 const forYou = [
-  "Have chosen their destination country",
-  "Are actively preparing a visa application",
-  "Want a professional and confidential process",
-  "Are ready to start within the next few weeks",
+  "You have a chosen destination country (UK, Canada, USA, Europe, etc.).",
+  "You are actively preparing your visa application.",
+  "You want a professional, confidential, and legitimate process.",
+  "You are ready to start within the next few weeks.",
 ];
 
 const notForYou = [
-  "Browsing with no active application in progress",
-  "Looking for an instant, automated solution",
-  "Not ready to engage with a specialist",
+  "You are looking for cheap, fake, or photoshopped bank statements which can lead to issues.",
+  "You want an instant, automated tool that risks getting you a 10-year embassy ban.",
+  "You are just browsing and don't have an active application timeline.",
 ];
 
 export default function PreCloseSection() {
@@ -26,10 +26,13 @@ export default function PreCloseSection() {
     <section className="section">
       <div className="container">
         {/* Eyebrow */}
-        <span className="eyebrow">Before You Continue</span>
-        <h2 className={`heading-lg ${styles.heading}`}>
-          This service is best suited for applicants who:
+        <span className="eyebrow text-center" style={{ display: "block" }}>Eligibility Check</span>
+        <h2 className={`heading-lg ${styles.heading}`} style={{ textAlign: "center", margin: "0.5rem auto 1rem" }}>
+          Before You Continue
         </h2>
+        <p style={{ textAlign: "center", color: "#cbd5e1", marginBottom: "2.5rem", fontSize: "1.1rem" }}>
+          We work with serious applicants only.
+        </p>
 
         <div className={styles.grid}>
           {/* For you */}
@@ -77,7 +80,7 @@ export default function PreCloseSection() {
         {/* Bridge text → form */}
         <div className={styles.bridge}>
           <p className={styles.bridgeText}>
-            If that&apos;s you, complete the quick eligibility check below.
+            If that&apos;s you, congratulations, you&apos;re a step ahead.  complete the quick eligibility check below.
           </p>
           <button
             id="pre-close-cta"
@@ -94,3 +97,4 @@ export default function PreCloseSection() {
     </section>
   );
 }
+
