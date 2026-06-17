@@ -19,8 +19,8 @@ export default function Navbar() {
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       {/* High-urgency top announcement bar */}
       <div className={styles.announcement}>
-        <span className={styles.announcementDot} />
-        <span>⚡ Meet Embassy Proof of Funds Requirements — in just 2 weeks ⏳</span>
+        {/* <span className={styles.announcementDot} /> */}
+        {/* <span>⚡ Meet Embassy Proof of Funds Requirements — in just 2 weeks ⏳</span> */}
       </div>
 
       <div className={styles.inner}>
