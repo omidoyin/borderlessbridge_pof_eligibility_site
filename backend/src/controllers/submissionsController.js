@@ -1,7 +1,7 @@
 const { body, validationResult } = require('express-validator');
-const db = require('../database');
+const { pool } = require('../database/pool');
 
-// Validation rules
+// ── Validation rules ─────────────────────────────────────────────────────────
 const submissionValidationRules = [
   body('fullName')
     .trim()
@@ -19,25 +19,66 @@ const submissionValidationRules = [
     .notEmpty().withMessage('WhatsApp number is required')
     .isLength({ min: 7, max: 20 }).withMessage('Please enter a valid phone number'),
 
+  body('nationality')
+    .trim()
+    .notEmpty().withMessage('Nationality is required')
+    .isLength({ min: 2, max: 100 }),
+
   body('destination')
     .trim()
     .notEmpty().withMessage('Destination country is required')
-    .isLength({ min: 2, max: 100 }),
+    .isIn(['Canada', 'UK', 'USA', 'Germany', 'Ireland', 'France', 'Other'])
+    .withMessage('Please select a valid destination country'),
 
   body('visaType')
     .trim()
     .notEmpty().withMessage('Visa type is required')
-    .isIn(['study', 'work', 'travel', 'other']).withMessage('Invalid visa type'),
+    .isIn(['student', 'work', 'tourist', 'other']).withMessage('Invalid visa type'),
 
   body('timeline')
     .trim()
     .notEmpty().withMessage('Application timeline is required')
-    .isIn(['within_1_month', '1_3_months', '3_6_months', '6_plus_months'])
+    .isIn(['within_30_days', '1_3_months', '3_6_months', 'more_than_6_months'])
     .withMessage('Invalid timeline option'),
+
+  body('knowsPofAmount')
+    .notEmpty().withMessage('Please indicate if you know the PoF amount')
+    .isIn(['yes', 'no']),
+
+  body('pofAmount')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim()
+    .isLength({ max: 200 }),
+
+  body('lettersReceived')
+    .optional({ nullable: true }),
+
+  body('accessToFunds')
+    .trim()
+    .notEmpty().withMessage('Please indicate your access to funds')
+    .isIn(['yes_fully', 'partially', 'no']),
+
+  body('applyingWithin30Days')
+    .notEmpty().withMessage('Please answer this question')
+    .isIn(['yes', 'no']),
+
+  body('priorRefusal')
+    .notEmpty().withMessage('Please answer this question')
+    .isIn(['yes', 'no']),
+
+  body('heardFrom')
+    .trim()
+    .notEmpty().withMessage('Please tell us how you heard about us')
+    .isIn(['Facebook', 'Instagram', 'TikTok', 'Google', 'Referral', 'Other']),
+
+  body('additionalInfo')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim()
+    .isLength({ max: 1000 }),
 ];
 
-// POST /api/submissions — create a new eligibility submission
-const createSubmission = (req, res) => {
+// ── POST /api/submissions ────────────────────────────────────────────────────
+const createSubmission = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -46,25 +87,57 @@ const createSubmission = (req, res) => {
     });
   }
 
-  const { fullName, email, phone, destination, visaType, timeline } = req.body;
-  const ipAddress = req.ip || req.connection.remoteAddress || null;
-  const userAgent = req.get('User-Agent') || null;
+  const {
+    fullName,
+    email,
+    phone,
+    nationality,
+    destination,
+    visaType,
+    timeline,
+    knowsPofAmount,
+    pofAmount,
+    lettersReceived,
+    accessToFunds,
+    applyingWithin30Days,
+    priorRefusal,
+    heardFrom,
+    additionalInfo,
+  } = req.body;
+
+  const ipAddress  = req.ip || req.connection?.remoteAddress || null;
+  const userAgent  = req.get('User-Agent') || null;
+  const letters    = Array.isArray(lettersReceived)
+    ? lettersReceived.join(', ')
+    : (lettersReceived || null);
 
   try {
-    const stmt = db.prepare(`
-      INSERT INTO submissions (full_name, email, phone, destination, visa_type, timeline, ip_address, user_agent)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const result = stmt.run(fullName, email, phone, destination, visaType, timeline, ipAddress, userAgent);
+    const { rows } = await pool.query(
+      `INSERT INTO submissions (
+          full_name, email, phone, nationality,
+          destination, visa_type, timeline,
+          knows_pof_amount, pof_amount, letters_received,
+          access_to_funds, applying_within_30_days, prior_refusal,
+          heard_from, additional_info, ip_address, user_agent
+        ) VALUES (
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+        ) RETURNING id`,
+      [
+        fullName, email, phone, nationality,
+        destination, visaType, timeline,
+        knowsPofAmount, pofAmount || null, letters,
+        accessToFunds, applyingWithin30Days, priorRefusal,
+        heardFrom, additionalInfo || null, ipAddress, userAgent,
+      ]
+    );
 
     return res.status(201).json({
       success: true,
       message: 'Eligibility assessment submitted successfully.',
-      id: result.lastInsertRowid,
+      id: rows[0].id,
     });
   } catch (err) {
-    console.error('DB error on createSubmission:', err);
+    console.error('[DB] createSubmission error:', err.message);
     return res.status(500).json({
       success: false,
       message: 'An internal error occurred. Please try again.',
@@ -72,44 +145,47 @@ const createSubmission = (req, res) => {
   }
 };
 
-// GET /api/submissions — list all submissions (admin use)
-const getSubmissions = (req, res) => {
+// ── GET /api/submissions ─────────────────────────────────────────────────────
+const getSubmissions = async (req, res) => {
   const { status, limit = 50, offset = 0 } = req.query;
 
   try {
-    let query = 'SELECT * FROM submissions';
     const params = [];
-
+    let where = '';
     if (status) {
-      query += ' WHERE status = ?';
       params.push(status);
+      where = `WHERE status = $${params.length}`;
     }
 
-    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(Number(limit), Number(offset));
+    const dataResult = await pool.query(
+      `SELECT * FROM submissions ${where} ORDER BY created_at DESC LIMIT $${params.length - 1} OFFSET $${params.length}`,
+      params
+    );
 
-    const rows = db.prepare(query).all(...params);
-    const total = db.prepare(
-      status ? 'SELECT COUNT(*) as count FROM submissions WHERE status = ?' : 'SELECT COUNT(*) as count FROM submissions'
-    ).get(...(status ? [status] : []));
+    const countParams = status ? [status] : [];
+    const countResult = await pool.query(
+      `SELECT COUNT(*) as count FROM submissions ${where}`,
+      countParams
+    );
 
     return res.json({
       success: true,
-      data: rows,
+      data: dataResult.rows,
       meta: {
-        total: total.count,
+        total: parseInt(countResult.rows[0].count, 10),
         limit: Number(limit),
         offset: Number(offset),
       },
     });
   } catch (err) {
-    console.error('DB error on getSubmissions:', err);
+    console.error('[DB] getSubmissions error:', err.message);
     return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
 
-// PATCH /api/submissions/:id/status — update submission status
-const updateSubmissionStatus = (req, res) => {
+// ── PATCH /api/submissions/:id/status ───────────────────────────────────────
+const updateSubmissionStatus = async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
 
@@ -119,16 +195,18 @@ const updateSubmissionStatus = (req, res) => {
   }
 
   try {
-    const stmt = db.prepare('UPDATE submissions SET status = ?, notes = ? WHERE id = ?');
-    const result = stmt.run(status, notes || null, id);
+    const result = await pool.query(
+      'UPDATE submissions SET status = $1, notes = $2 WHERE id = $3',
+      [status, notes || null, id]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ success: false, message: 'Submission not found.' });
     }
 
     return res.json({ success: true, message: 'Status updated.' });
   } catch (err) {
-    console.error('DB error on updateSubmissionStatus:', err);
+    console.error('[DB] updateSubmissionStatus error:', err.message);
     return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };

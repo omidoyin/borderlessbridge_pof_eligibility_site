@@ -12,7 +12,7 @@ export default function HeroSection() {
 
         {/* Headline */}
         <h1 className={`heading-xl ${styles.headline}`}>
-          ⚡ Meet Embassy Proof of Funds Requirements — <span className={styles.headlineAccent}>In Just 2 Weeks ⏳</span>
+          ⚡ Meet Embassy Proof of Funds Requirements — <span className={styles.headlineAccent}>In Just 2 Weeks </span>
         </h1>
 
         {/* Paragraph */}
