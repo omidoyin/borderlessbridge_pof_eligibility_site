@@ -24,12 +24,10 @@ interface FieldErrors {
   [key: string]: string;
 }
 
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2348149517851";
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "2349133380497";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "Hi BorderlessBridge, I completed the eligibility assessment and would like to proceed with my Proof of Funds application."
-);
+
 
 export default function EligibilityForm() {
   const [form, setForm] = useState<FormData>({
@@ -49,6 +47,21 @@ export default function EligibilityForm() {
     heardFrom: "",
     additionalInfo: "",
   });
+
+  const WHATSAPP_MESSAGE = encodeURIComponent(`
+Hi BorderlessBridge,
+
+I completed the eligibility assessment and would like to proceed with my Proof of Funds application.
+
+Name: ${form.fullName}
+Destination: ${form.destination}
+Visa Type: ${form.visaType}
+Timeline: ${form.timeline}
+POF Amount: ${form.pofAmount || "Not specified"}
+Access to Funds: ${form.accessToFunds}
+Applying Within 30 Days: ${form.applyingWithin30Days}
+Prior Refusal: ${form.priorRefusal}
+`);
 
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
