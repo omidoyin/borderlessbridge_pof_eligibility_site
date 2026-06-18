@@ -402,7 +402,7 @@ export default function EligibilityForm() {
                     name="pofAmount"
                     type="text"
                     className={`form-control ${errors.pofAmount ? "error" : ""}`}
-                    placeholder="e.g. Can$21,000 or £12,000"
+                    placeholder="e.g. ₦ 80,000,000"
                     value={form.pofAmount}
                     onChange={handleChange}
                   />

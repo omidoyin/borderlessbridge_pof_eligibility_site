@@ -14,7 +14,7 @@ app.set('trust proxy', 1);
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:3000', 'http://localhost:3001'],
+  origin: [FRONTEND_URL, 'http://localhost:3000', 'http://localhost:3001', 'https://borderlessbridge.veleonex.com'],
   methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
