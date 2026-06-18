@@ -49,7 +49,7 @@ export default function HeroSection() {
             { icon: "🛡️", text: "Verification Guarantee" },
           ].map((t) => (
             <div className={styles.trustChip} key={t.text}>
-              <span>{t.icon}</span>
+              {/* <span>{t.icon}</span> */}
               <span>{t.text}</span>
             </div>
           ))}
