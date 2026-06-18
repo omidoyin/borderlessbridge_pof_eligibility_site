@@ -107,9 +107,62 @@ const createSubmission = async (req, res) => {
 
   const ipAddress  = req.ip || req.connection?.remoteAddress || null;
   const userAgent  = req.get('User-Agent') || null;
-  const letters    = Array.isArray(lettersReceived)
+
+  // Calculate score and priority
+  let score = 0;
+  const lettersStr = Array.isArray(lettersReceived)
     ? lettersReceived.join(', ')
-    : (lettersReceived || null);
+    : (lettersReceived || '');
+  const hasLetters = lettersStr && !lettersStr.includes('None Yet') && lettersStr.trim() !== '';
+
+  if (hasLetters) score += 30;
+  if (accessToFunds === 'no') score += 20;
+  if (timeline === '1_3_months' || timeline === 'within_30_days') score += 20;
+  if (knowsPofAmount === 'yes') score += 10;
+
+  let priority = 'low';
+  if (score >= 60) {
+    priority = 'high';
+  } else if (score >= 30) {
+    priority = 'medium';
+  }
+
+  // Convert timeline code to readable string
+  let readableTimeline = timeline;
+  if (timeline === 'within_30_days') readableTimeline = 'within 30 days';
+  else if (timeline === '1_3_months') readableTimeline = 'within 1–3 months';
+  else if (timeline === '3_6_months') readableTimeline = 'within 3–6 months';
+  else if (timeline === 'more_than_6_months') readableTimeline = 'in more than 6 months';
+
+  // Convert accessToFunds code to readable string
+  let readableAccess = 'no';
+  if (accessToFunds === 'yes_fully') readableAccess = 'full';
+  else if (accessToFunds === 'partially') readableAccess = 'partial';
+
+  const lettersDisplay = hasLetters ? lettersStr : 'no letters yet';
+  const refusalDisplay = priorRefusal === 'yes' ? 'have a' : 'have no';
+
+  const summary = `🔵 Lead Summary
+
+This is a ${destination} ${visaType} visa applicant (${nationality}) who has received ${lettersDisplay} and intends to apply ${readableTimeline}.
+
+The applicant is aware of the required proof of funds (${pofAmount || 'unspecified amount'}) but currently has ${readableAccess} access to the funds, indicating a possible need for financial support guidance.
+
+They were acquired through ${heardFrom} and ${refusalDisplay} prior visa refusal history.
+
+👤 Full Details
+Name: ${fullName}
+Email: ${email}
+Phone: ${phone}
+Nationality: ${nationality}
+Destination: ${destination}
+Visa Type: ${visaType}
+Timeline: ${readableTimeline}
+Admission: ${lettersDisplay}
+POF: ${pofAmount || 'N/A'}
+Access to Funds: ${accessToFunds}
+Source: ${heardFrom}
+Status: New`;
 
   try {
     const { rows } = await pool.query(
@@ -118,16 +171,18 @@ const createSubmission = async (req, res) => {
           destination, visa_type, timeline,
           knows_pof_amount, pof_amount, letters_received,
           access_to_funds, applying_within_30_days, prior_refusal,
-          heard_from, additional_info, ip_address, user_agent
+          heard_from, additional_info, ip_address, user_agent,
+          summary, priority
         ) VALUES (
-          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19
         ) RETURNING id`,
       [
         fullName, email, phone, nationality,
         destination, visaType, timeline,
-        knowsPofAmount, pofAmount || null, letters,
+        knowsPofAmount, pofAmount || null, lettersStr || null,
         accessToFunds, applyingWithin30Days, priorRefusal,
         heardFrom, additionalInfo || null, ipAddress, userAgent,
+        summary, priority,
       ]
     );
 
@@ -189,7 +244,7 @@ const updateSubmissionStatus = async (req, res) => {
   const { id } = req.params;
   const { status, notes } = req.body;
 
-  const validStatuses = ['new', 'contacted', 'converted', 'rejected'];
+  const validStatuses = ['new', 'contacted', 'converted', 'rejected', 'archived'];
   if (!validStatuses.includes(status)) {
     return res.status(422).json({ success: false, message: 'Invalid status value.' });
   }

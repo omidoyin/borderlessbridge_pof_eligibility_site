@@ -57,9 +57,17 @@ async function pingDatabase() {
       notes TEXT,
       ip_address VARCHAR(45),
       user_agent TEXT,
+      summary TEXT,
+      priority VARCHAR(10) DEFAULT 'medium',
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
+  `);
+
+  // Ensure columns exist on existing databases
+  await pool.query(`
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS summary TEXT;
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS priority VARCHAR(10) DEFAULT 'medium';
   `);
 
   await pool.query(`

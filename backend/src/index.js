@@ -34,16 +34,6 @@ const globalLimiter = rateLimit({
   message: { success: false, message: 'Too many requests. Please try again later.' },
 });
 
-// Strict limiter for form submissions: 5 per 15 minutes per IP
-const submissionLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { success: false, message: 'Too many submissions. Please wait before trying again.' },
-  skipSuccessfulRequests: false,
-});
-
 app.use(globalLimiter);
 
 // ── Health routes ─────────────────────────────────────────────────────────────
@@ -67,7 +57,7 @@ app.get('/api/borderlessbridgeheart', async (_req, res) => {
 });
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use('/api/submissions', submissionLimiter, submissionsRouter);
+app.use('/api/submissions', submissionsRouter);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
