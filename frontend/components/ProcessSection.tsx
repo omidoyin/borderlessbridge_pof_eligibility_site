@@ -4,7 +4,7 @@ export default function ProcessSection() {
   const steps = [
     {
       num: "01",
-      title: "Check you eligibility (60 Seconds)",
+      title: "Check you eligibility (30 Seconds)",
       desc: "Fill out the quick eligibility form below with your target country and timeline.",
     },
     {

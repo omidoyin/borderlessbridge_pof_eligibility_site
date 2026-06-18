@@ -37,7 +37,7 @@ export default function HeroSection() {
             </svg>
           </a>
           <p className={styles.ctaMeta}>
-            Free 60-Second Assessment • No Commitment Required
+            Free 30-Second Assessment • No Commitment Required
           </p>
         </div>
 

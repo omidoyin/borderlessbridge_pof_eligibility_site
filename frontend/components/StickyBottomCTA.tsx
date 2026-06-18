@@ -13,7 +13,7 @@ export default function StickyBottomCTA() {
       <div className={styles.inner}>
         <div className={styles.left}>
           <p className={styles.label}>Free eligibility assessment</p>
-          <p className={styles.meta}>60 seconds &nbsp;·&nbsp; No commitment</p>
+          <p className={styles.meta}>30 seconds &nbsp;·&nbsp; No commitment</p>
         </div>
         <button
           id="sticky-cta-btn"

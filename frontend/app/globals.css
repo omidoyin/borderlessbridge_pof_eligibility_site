@@ -570,5 +570,9 @@ input, select, textarea { font-family: inherit; }
   .container-wide {
     padding: 0 1rem;
   }
+  .stat-number {
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+ 
+}
 }
 

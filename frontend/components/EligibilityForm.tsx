@@ -216,7 +216,7 @@ export default function EligibilityForm() {
               Complete Your Eligibility Assessment
             </h2>
             <p className={styles.formSub}>
-              Takes 60 seconds. A specialist will review and contact you on WhatsApp within 24 hours.
+              Takes 30 seconds. A specialist will review and contact you on WhatsApp within 24 hours.
             </p>
             <div className="rating-row" style={{ marginTop: "0.6rem", gap: "0.4rem" }}>
               <div className="rating-stars" style={{ fontSize: "0.9rem" }}>

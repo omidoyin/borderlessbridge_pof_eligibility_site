@@ -92,8 +92,14 @@
 }
 
 @media (max-width: 520px) {
-  .statsRow { flex-direction: column; gap: 1.5rem; }
-  .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 0 1.5rem; }
+  .statsRow { flex-direction: row; gap: 1.5rem; }
+  .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 0 1.5rem; 
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   .stat:last-child { border-bottom: none; padding-left: 0; }
   .stat:not(:first-child):not(:last-child) { padding-left: 0; }
 }
