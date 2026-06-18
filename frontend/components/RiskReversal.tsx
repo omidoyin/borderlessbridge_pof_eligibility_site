@@ -37,7 +37,7 @@ export default function RiskReversal() {
     <section className={styles.section}>
       <div className="container">
          <div style={{ marginBottom: "2rem"}}>
-              <img src="/Testimonial_Barry.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
+              <img src="/Testimonial_Barry1.jpeg" alt="Review" className=" inset-0 w-full h-full object-cover"  />
               
            </div>
         <div className={styles.inner}>
