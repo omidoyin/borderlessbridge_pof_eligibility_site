@@ -329,7 +329,7 @@ Prior Refusal: ${form.priorRefusal}
                     <option value="Germany">Germany</option>
                     <option value="Ireland">Ireland</option>
                     <option value="France">France</option>
-                    <option value="Other">Other</option>
+                    {/* <option value="Other">Other</option> */}
                   </select>
                 </div>
                 {errors.destination && <span className="form-error">{errors.destination}</span>}
@@ -349,7 +349,8 @@ Prior Refusal: ${form.priorRefusal}
                     <option value="student">Student Visa</option>
                     <option value="work">Work Visa</option>
                     <option value="tourist">Tourist Visa</option>
-                    <option value="other">Other</option>
+                    <option value="permanent_residency">Permanent Residency</option>
+                    {/* <option value="other">Other</option> */}
                   </select>
                 </div>
                 {errors.visaType && <span className="form-error">{errors.visaType}</span>}
@@ -557,7 +558,7 @@ Prior Refusal: ${form.priorRefusal}
                     <option value="TikTok">TikTok</option>
                     <option value="Google">Google</option>
                     <option value="Referral">Referral</option>
-                    <option value="Other">Other</option>
+                    {/* <option value="Other">Other</option> */}
                   </select>
                 </div>
                 {errors.heardFrom && <span className="form-error">{errors.heardFrom}</span>}
