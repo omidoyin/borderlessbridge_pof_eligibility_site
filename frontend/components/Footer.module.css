@@ -1,7 +1,8 @@
 .footer {
-  background: #040712;
-  color: rgba(255,255,255,0.6);
+  background: var(--cream-dark);
+  color: var(--gray-600);
   padding: 2.5rem 0 2rem;
+  border-top: 1px solid var(--gray-200);
 }
 
 .top {
@@ -18,8 +19,8 @@
 .logoMark {
   width: 38px;
   height: 38px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: #ffffff;
+  border: 1px solid var(--gray-200);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -29,10 +30,10 @@
 }
 
 .brandName {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--navy);
   line-height: 1.2;
 }
 
@@ -48,12 +49,12 @@
   font-size: 0.84rem;
   line-height: 1.65;
   max-width: 460px;
-  color: rgba(255,255,255,0.5);
+  color: var(--gray-600);
 }
 
 .divider {
   border: none;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid var(--gray-200);
   margin: 0 0 1.25rem;
 }
 
@@ -65,13 +66,13 @@
 
 .copy {
   font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
+  color: var(--gray-400);
   font-weight: 500;
 }
 
 .disclaimer {
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.3);
+  color: var(--gray-400);
   line-height: 1.6;
   max-width: 520px;
 }

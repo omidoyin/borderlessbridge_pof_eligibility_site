@@ -1,26 +1,26 @@
 :root {
-  /* Colors - Redefined for a premium, high-converting DARK theme */
-  --cream:       #050811;       /* Deep space dark navy background */
-  --cream-dark:  #0a101f;       /* Lighter dark navy for cards */
-  --navy:        #ffffff;       /* Pure white for headlines and body text */
-  --navy-mid:    #0c1424;       /* Dropdown/nav backgrounds */
-  --navy-light:  #1e293b;       /* Active states/borders */
-  --gold:        #f59e0b;       /* Vibrant Gold */
-  --gold-light:  #fbbf24;       /* Glow Gold */
-  --gold-pale:   rgba(245, 158, 11, 0.08); /* Transparent gold for highlights */
-  --green:       #10b981;       /* WhatsApp/Success Emerald Green */
-  --green-light: rgba(16, 185, 129, 0.1);
-  --white:       #0a101f;       /* Legacy white containers now dark navy cards */
-  --gray-100:    #080d1a;       /* Lighter slate */
-  --gray-200:    rgba(255, 255, 255, 0.08); /* Subtle dark border color */
-  --gray-400:    #94a3b8;       /* Cool slate gray for descriptions */
-  --gray-600:    #cbd5e1;       /* Light gray for general text */
-  --gray-800:    #f9fafb;       /* Almost white for subtext/labels */
-  --red:         #ef4444;       /* Warning/Brutal Truth Red */
-  --red-light:   rgba(239, 68, 68, 0.08);
+  /* Colors - Redefined for a premium, high-converting LIGHT theme */
+  --cream:       #ffffff;       /* Pure white page background */
+  --cream-dark:  #f8fafc;       /* Subtle off-white for alternative sections/cards */
+  --navy:        #090d16;       /* Deep slate/black for headings and main texts */
+  --navy-mid:    #ffffff;       /* Card/Dropdown background */
+  --navy-light:  #f1f5f9;       /* Light border/active state background */
+  --gold:        #ea580c;       /* Premium accent orange (highly legible on white) */
+  --gold-light:  #f97316;       /* Vibrant orange for hover states */
+  --gold-pale:   rgba(234, 88, 12, 0.06); /* Soft orange highlight tint */
+  --green:       #16a34a;       /* Forest Emerald Green */
+  --green-light: rgba(22, 163, 74, 0.06);
+  --white:       #ffffff;       /* Cards background */
+  --gray-100:    #f8fafc;       /* Lightest slate */
+  --gray-200:    #e2e8f0;       /* Light gray border color */
+  --gray-400:    #64748b;       /* Slate gray for descriptions/subtexts */
+  --gray-600:    #334155;       /* Medium slate for readable body text */
+  --gray-800:    #1e293b;       /* Dark slate for labels/headings */
+  --red:         #dc2626;       /* High-contrast Warning Red */
+  --red-light:   rgba(220, 38, 38, 0.05);
 
   /* Typography */
-  --font-serif:  var(--font-serif-next), 'Playfair Display', Georgia, serif;
+  --font-serif:  var(--font-sans-next), 'Inter', system-ui, sans-serif; /* Map serif to sans to enforce typography preferences */
   --font-sans:   var(--font-sans-next), 'Inter', system-ui, sans-serif;
 
   /* Spacing scale */
@@ -28,7 +28,7 @@
   --space-sm:   1rem;
   --space-md:   1.5rem;
   --space-lg:   2.5rem;
-  --space-xl:   4rem;
+  --space-xl:   4.5rem;       /* Uniform section spacing */
   --space-2xl:  6rem;
 
   /* Radii */
@@ -39,10 +39,10 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.6);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg:  0 8px 32px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-xl:  0 16px 48px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.06);
 
   /* Transitions */
   --transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -63,9 +63,9 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: #050811;
-  color: #f9fafb;
-  line-height: 1.6;
+  background-color: #ffffff;
+  color: #090d16;
+  line-height: 1.7; /* Increased for better word readability */
   overflow-x: hidden;
 }
 
@@ -76,7 +76,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 input, select, textarea { font-family: inherit; }
 
 /* ── Typography helpers ───────────────────────────────────────────────────── */
-.serif       { font-family: var(--font-serif); }
+.serif       { font-family: var(--font-sans); } /* Map to sans for uniform readability */
 .italic      { font-style: italic; }
 .gold-text   { color: var(--gold); }
 .green-text  { color: var(--green); }
@@ -104,7 +104,7 @@ input, select, textarea { font-family: inherit; }
 }
 
 .section-dark {
-  background-color: var(--cream-dark); /* Lighter dark navy for contrast */
+  background-color: var(--cream-dark); /* Lighter background for contrast in light theme */
   color: var(--navy);
   padding: var(--space-xl) 0;
   border-top: 1px solid var(--gray-200);
@@ -129,26 +129,27 @@ input, select, textarea { font-family: inherit; }
 
 /* ── Headings ─────────────────────────────────────────────────────────────── */
 .heading-xl {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(2.4rem, 6vw, 3.8rem);
   font-weight: 800;
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .heading-lg {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .heading-md {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(1.4rem, 3vw, 1.9rem);
-  font-weight: 700;
+  font-weight: 750;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 /* ── Dividers ─────────────────────────────────────────────────────────────── */
@@ -159,7 +160,7 @@ input, select, textarea { font-family: inherit; }
 }
 
 .divider-gold {
-  border-top-color: rgba(245, 158, 11, 0.15);
+  border-top-color: rgba(234, 88, 12, 0.15);
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────────── */
@@ -169,21 +170,21 @@ input, select, textarea { font-family: inherit; }
   justify-content: center;
   gap: 0.5rem;
   background: var(--gold);
-  color: #050811; /* Explicitly dark text for high contrast on gold button */
+  color: #ffffff; /* High contrast white text on orange button */
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 700;
   padding: 1rem 2rem;
   border-radius: var(--radius-full);
   transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
-  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.25);
   letter-spacing: 0.01em;
 }
 
 .btn-primary:hover {
   background: var(--gold-light);
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 8px 28px rgba(234, 88, 12, 0.35);
 }
 
 .btn-primary:active {
@@ -194,7 +195,7 @@ input, select, textarea { font-family: inherit; }
   background: var(--navy-light);
   color: var(--navy);
   border: 1px solid var(--gray-200);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .btn-navy:hover {
@@ -213,6 +214,7 @@ input, select, textarea { font-family: inherit; }
   align-items: center;
   gap: 0.2rem;
   color: var(--gold);
+  font-size: 1.05rem;
 }
 
 .rating-row {
@@ -421,18 +423,18 @@ input, select, textarea { font-family: inherit; }
 .form-label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--gray-800);
   letter-spacing: 0.01em;
 }
 
 .form-control {
   width: 100%;
   padding: 0.85rem 1.1rem;
-  background: #0c1424;
-  border: 1.5px solid rgba(255, 255, 255, 0.34);
+  background: #ffffff;
+  border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  color: #f9fafb;
+  color: var(--navy);
   transition: border-color var(--transition), box-shadow var(--transition);
   outline: none;
   appearance: none;
@@ -440,22 +442,22 @@ input, select, textarea { font-family: inherit; }
 }
 
 .form-control:focus {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
 }
 
 .form-control::placeholder {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .form-control.error {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .form-error {
   font-size: 0.78rem;
-  color: #ef4444;
+  color: var(--red);
   font-weight: 500;
 }
 

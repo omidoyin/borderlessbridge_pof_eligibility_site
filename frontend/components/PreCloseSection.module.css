@@ -1,7 +1,19 @@
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
 .heading {
-  color: #ffffff;
-  margin: 0.5rem 0 2rem;
+  color: var(--navy);
+  margin: 0.5rem 0 1rem;
   max-width: 520px;
+}
+
+.intro {
+  font-size: 1.1rem;
+  color: var(--gray-600);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .grid {
@@ -15,7 +27,7 @@
   border-radius: 16px;
   padding: 1.75rem;
   border: 1.5px solid transparent;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -24,23 +36,23 @@
 }
 
 .forCard {
-  background: rgba(16, 185, 129, 0.04);
-  border-color: rgba(16, 185, 129, 0.326);
-  box-shadow: 0 4px 24px rgba(16, 185, 129, 0.03);
+  background: var(--cream-dark);
+  border-color: rgba(22, 163, 74, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .forCard:hover {
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .notCard {
-  background: rgba(239, 68, 68, 0.03);
-  border-color: rgba(239, 68, 68, 0.279);
-  box-shadow: 0 4px 24px rgba(239, 68, 68, 0.02);
+  background: var(--cream-dark);
+  border-color: rgba(220, 38, 38, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 .notCard:hover {
-  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.05);
+  box-shadow: var(--shadow-md);
 }
 
 .cardHeader {
@@ -53,19 +65,19 @@
 .iconGreen {
   width: 32px;
   height: 32px;
-  background: #10b981;
+  background: #16a34a;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #050811;
+  color: #ffffff;
   flex-shrink: 0;
 }
 
 .iconRed {
   width: 32px;
   height: 32px;
-  background: #ef4444;
+  background: #dc2626;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -75,10 +87,10 @@
 }
 
 .cardTitle {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 1.15rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--navy);
 }
 
 .list {
@@ -93,9 +105,9 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(16, 185, 129, 0.08);
+  border-bottom: 1px solid var(--gray-200);
   font-size: 0.95rem;
-  color: #e2e8f0;
+  color: var(--navy);
   font-weight: 500;
   line-height: 1.5;
 }
@@ -106,13 +118,13 @@
 }
 
 .listItemMuted {
-  color: #94a3b8;
-  border-bottom-color: rgba(239, 68, 68, 0.06);
+  color: var(--gray-600);
+  border-bottom-color: var(--gray-200);
   font-weight: 400;
 }
 
 .checkMark {
-  color: #10b981;
+  color: #16a34a;
   font-weight: 700;
   font-size: 1.1rem;
   flex-shrink: 0;
@@ -120,7 +132,7 @@
 }
 
 .crossMark {
-  color: #ef4444;
+  color: #dc2626;
   font-weight: 700;
   font-size: 1.1rem;
   flex-shrink: 0;
@@ -135,15 +147,15 @@
   gap: 1.25rem;
   text-align: center;
   padding: 2.25rem 1.5rem;
-  background: #0a101f;
+  background: var(--cream-dark);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
 }
 
 .bridgeText {
   font-size: 1.05rem;
-  color: #cbd5e1;
+  color: var(--gray-600);
   font-weight: 500;
   max-width: 440px;
   line-height: 1.6;

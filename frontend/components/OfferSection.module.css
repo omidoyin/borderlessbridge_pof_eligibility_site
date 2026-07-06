@@ -3,14 +3,14 @@
 }
 
 .heading {
-  color: #ffffff;
-  margin: 0.5rem 0 0.75rem;
+  color: var(--navy);
+  margin: 0.5rem 0 1rem;
   max-width: 500px;
 }
 
 .intro {
   font-size: 0.97rem;
-  color: #94a3b8;
+  color: var(--gray-600);
   line-height: 1.65;
   max-width: 500px;
 }
@@ -20,11 +20,11 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1.5px solid #f59f0b90;
+  border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #0a101f;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: var(--cream-dark);
+  box-shadow: var(--shadow-md);
 }
 
 .item {
@@ -32,7 +32,7 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1.4rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid var(--gray-200);
   transition: background var(--transition);
 }
 
@@ -41,16 +41,15 @@
 }
 
 .item:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(234, 88, 12, 0.02);
 }
 
 .number {
   flex-shrink: 0;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.6rem;
   font-weight: 800;
-  /* color: rgba(255, 255, 255, 0.1); */
-  color: #f59e0b;
+  color: var(--gold);
   line-height: 1;
   width: 36px;
   margin-top: 2px;
@@ -59,7 +58,7 @@
 }
 
 .item:hover .number {
-  color: #f59e0b;
+  color: var(--gold);
 }
 
 .content {
@@ -77,24 +76,24 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(22, 163, 74, 0.15);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #10b981;
+  color: var(--green);
 }
 
 .itemTitle {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 700;
-  color: #f9fafb;
+  color: var(--navy);
 }
 
 .itemDesc {
   font-size: 0.87rem;
-  color: #94a3b8;
+  color: var(--gray-600);
   line-height: 1.55;
   padding-left: calc(24px + 0.6rem);
 }
@@ -102,15 +101,15 @@
 /* Callout bar at bottom */
 .callout {
   margin-top: 1.5rem;
-  background: rgba(245, 158, 11, 0.08);
+  background: var(--gold-pale);
   border-radius: var(--radius-md);
   padding: 1.1rem 1.5rem;
-  border-left: 3px solid #f59e0b;
+  border-left: 3px solid var(--gold);
 }
 
 .calloutText {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: var(--gray-600);
   line-height: 1.6;
   font-style: italic;
 }

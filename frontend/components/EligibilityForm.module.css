@@ -1,6 +1,6 @@
 .section {
   padding: 4rem 0 6rem;
-  background: #050811;
+  background: var(--cream);
   position: relative;
 }
 
@@ -11,7 +11,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, rgba(245, 158, 11, 0), #f59e0b, rgba(245, 158, 11, 0));
+  background: linear-gradient(90deg, rgba(234, 88, 12, 0), var(--gold), rgba(234, 88, 12, 0));
 }
 
 /* Authority line */
@@ -19,63 +19,63 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(245, 158, 11, 0.05);
-  color: #f9fafb;
+  background: var(--gold-pale);
+  color: var(--navy);
   border-radius: 12px;
   padding: 1.1rem 1.4rem;
   margin-bottom: 2rem;
   font-size: 0.95rem;
   line-height: 1.55;
-  border: 1px solid rgba(245, 158, 11, 0.15);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(234, 88, 12, 0.15);
+  box-shadow: var(--shadow-sm);
 }
 
 .authorityIcon {
   flex-shrink: 0;
   width: 28px;
   height: 28px;
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(234, 88, 12, 0.15);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f59e0b;
+  color: var(--gold);
 }
 
 .authorityLine p {
-  color: #f9fafb;
+  color: var(--navy);
   margin: 0;
 }
 
 .authorityLine strong {
-  color: #ffffff;
+  color: var(--navy);
   font-weight: 700;
 }
 
 /* Form card */
 .formCard {
-  background: #0a101f;
+  background: #ffffff;
   border-radius: 24px;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
-  border: 1px solid rgba(224, 155, 16, 0.377);
+  border: 1px solid var(--gray-200);
 }
 
 .formHeader {
-  background: #080d1a;
+  background: var(--cream-dark);
   padding: 2.25rem 2rem 2rem;
-  border-bottom: 4px solid #f59e0b;
+  border-bottom: 4px solid var(--gold);
 }
 
 .formTitle {
-  color: #ffffff;
-  margin: 0.35rem 0 0.5rem;
-  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--navy);
+  margin: 0 0 0.75rem;
+  font-family: var(--font-sans);
 }
 
 .formSub {
   font-size: 0.87rem;
-  color: #94a3b8;
+  color: var(--gray-600);
   line-height: 1.5;
 }
 
@@ -101,18 +101,18 @@
   padding: 1.2rem;
   justify-content: center;
   cursor: pointer;
-  background: #f59e0b;
-  color: #050811;
+  background: var(--gold);
+  color: #ffffff;
   font-weight: 700;
   border-radius: 9999px;
   transition: all 0.22s ease;
-  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.25);
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #fbbf24;
+  background: var(--gold-light);
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 8px 28px rgba(234, 88, 12, 0.35);
 }
 
 .submitBtn:disabled {
@@ -126,8 +126,8 @@
   display: inline-block;
   width: 18px;
   height: 18px;
-  border: 2.5px solid rgba(5, 8, 17, 0.25);
-  border-top-color: #050811;
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   margin-right: 8px;
@@ -148,23 +148,23 @@
 
 /* Error banner */
 .errorBanner {
-  background: rgba(239, 68, 68, 0.05);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: var(--red-light);
+  border: 1px solid rgba(220, 38, 38, 0.2);
   border-radius: 8px;
   padding: 1rem;
   font-size: 0.9rem;
-  color: #ef4444;
+  color: var(--red);
   line-height: 1.5;
 }
 
 /* Success card */
 .successCard {
-  background: #0a101f;
+  background: #ffffff;
   border-radius: 24px;
   padding: 4rem 2rem;
   text-align: center;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,25 +174,25 @@
 .successIcon {
   width: 80px;
   height: 80px;
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(22, 163, 74, 0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #10b981;
+  color: var(--green);
   animation: spin 0.5s ease both; /* using custom check animations if defined */
 }
 
 .successTitle {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-sans);
   font-size: 1.95rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--navy);
 }
 
 .successText {
   font-size: 1.05rem;
-  color: #cbd5e1;
+  color: var(--gray-600);
   line-height: 1.65;
   max-width: 420px;
 }
@@ -223,7 +223,7 @@
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--gray-200);
 }
 
 .formSection:last-of-type {
@@ -277,8 +277,8 @@
   align-items: center;
   gap: 0.6rem;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--cream-dark);
+  border: 1px solid var(--gray-200);
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   color: var(--gray-600);
@@ -288,8 +288,8 @@
 }
 
 .checkboxOption:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(245, 158, 11, 0.2);
+  background: var(--navy-light);
+  border-color: var(--gold);
 }
 
 .checkboxOption input[type="checkbox"] {

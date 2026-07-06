@@ -5,23 +5,23 @@
   right: 0;
   width: 100%;
   z-index: 1000;
-  background: rgba(5, 8, 17, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--gray-200);
   transition: background var(--transition), border-color var(--transition);
 }
 
 .scrolled {
-  background: rgba(5, 8, 17, 0.9);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--gray-200);
   box-shadow: var(--shadow-md);
 }
 
 /* Announcement Bar */
 .announcement {
-  background: rgba(245, 158, 11, 0.06);
-  border-bottom: 1px solid rgba(245, 158, 11, 0.12);
+  background: rgba(234, 88, 12, 0.06);
+  border-bottom: 1px solid rgba(234, 88, 12, 0.12);
   padding: 0.45rem 1rem;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
   align-items: center;
   gap: 0.6rem;
   text-decoration: none;
-  color: #ffffff;
+  color: var(--navy);
 }
 
 .logoMark {
@@ -92,7 +92,7 @@
   font-family: var(--font-sans);
   font-size: 1.1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--navy);
   letter-spacing: -0.01em;
 }
 
@@ -111,7 +111,7 @@
   align-items: center;
   justify-content: center;
   background: var(--gold);
-  color: #050811;
+  color: #ffffff;
   font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 700;

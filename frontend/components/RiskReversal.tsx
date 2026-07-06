@@ -70,7 +70,7 @@ export default function RiskReversal() {
           {/* Section 7 - Social Proof & Executive Authority */}
           <div className={styles.inner} style={{ marginTop: "4rem" }}>
             {/* <span className="eyebrow">Social Proof & Executive Authority</span> */}
-            <h2 className={`heading-md`} style={{ color: "#ffffff", marginBottom: "1.5rem" }}>
+            <h2 className={`heading-md`} style={{ marginBottom: "1.5rem" }}>
               Real Approvals. Real Experts.
             </h2>
 

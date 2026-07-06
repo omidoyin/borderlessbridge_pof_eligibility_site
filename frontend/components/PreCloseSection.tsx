@@ -25,14 +25,16 @@ export default function PreCloseSection() {
   return (
     <section className="section">
       <div className="container">
-        {/* Eyebrow */}
-        <span className="eyebrow text-center" style={{ display: "block" }}>Eligibility Check</span>
-        <h2 className={`heading-lg ${styles.heading}`} style={{ textAlign: "center", margin: "0.5rem auto 1rem" }}>
-          Before You Continue
-        </h2>
-        <p style={{ textAlign: "center", color: "#cbd5e1", marginBottom: "2.5rem", fontSize: "1.1rem" }}>
-          We work with serious applicants only.
-        </p>
+        {/* Header */}
+        <div className={styles.header}>
+          <span className="eyebrow text-center" style={{ display: "block" }}>Eligibility Check</span>
+          <h2 className={`heading-lg ${styles.heading}`}>
+            Before You Continue
+          </h2>
+          <p className={styles.intro}>
+            We work with serious applicants only.
+          </p>
+        </div>
 
         <div className={styles.grid}>
           {/* For you */}
