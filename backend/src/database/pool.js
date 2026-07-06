@@ -66,8 +66,39 @@ async function pingDatabase() {
 
   // Ensure columns exist on existing databases
   await pool.query(`
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS nationality VARCHAR(100);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS knows_pof_amount VARCHAR(10);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS pof_amount VARCHAR(200);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS letters_received TEXT;
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS access_to_funds VARCHAR(50);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS applying_within_30_days VARCHAR(10);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS prior_refusal VARCHAR(10);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS heard_from VARCHAR(50);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS additional_info TEXT;
     ALTER TABLE submissions ADD COLUMN IF NOT EXISTS summary TEXT;
     ALTER TABLE submissions ADD COLUMN IF NOT EXISTS priority VARCHAR(10) DEFAULT 'medium';
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS score INT DEFAULT 0;
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS notes TEXT;
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS ip_address VARCHAR(45);
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS user_agent TEXT;
+  `);
+
+
+  // Create bookings table
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id           SERIAL PRIMARY KEY,
+      submission_id INT REFERENCES submissions(id) ON DELETE SET NULL,
+      full_name    VARCHAR(100) NOT NULL,
+      email        VARCHAR(100) NOT NULL,
+      phone        VARCHAR(20)  NOT NULL,
+      booked_date  DATE         NOT NULL,
+      booked_time  VARCHAR(10)  NOT NULL,
+      status       VARCHAR(20)  NOT NULL DEFAULT 'pending',
+      notes        TEXT,
+      created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(booked_date, booked_time)
+    );
   `);
 
   await pool.query(`

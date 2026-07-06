@@ -29,7 +29,8 @@
 
 .item {
   display: flex;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  flex-direction: column;
   gap: 1rem;
   padding: 1.4rem 1.5rem;
   border-bottom: 1px solid var(--gray-200);

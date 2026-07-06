@@ -46,7 +46,8 @@
 
 .card {
   display: flex;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  flex-direction: column;
   gap: 1rem;
   background: var(--cream-dark);
   border: 1px solid var(--gray-200);

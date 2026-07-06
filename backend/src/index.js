@@ -4,6 +4,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { pool, pingDatabase } = require('./database/pool');
 const submissionsRouter = require('./routes/submissions');
+const bookingsRouter = require('./routes/bookings');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -58,6 +59,7 @@ app.get('/api/borderlessbridgeheart', async (_req, res) => {
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/submissions', submissionsRouter);
+app.use('/api/bookings', bookingsRouter);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
