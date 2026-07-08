@@ -6,10 +6,14 @@ const { pool, pingDatabase } = require('./database/pool');
 const submissionsRouter = require('./routes/submissions');
 const bookingsRouter = require('./routes/bookings');
 const settingsRouter = require('./routes/settings');
+const googleAuthRouter = require('./routes/googleAuth');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+
+
 
 // ── Trust proxy (required for accurate IP behind Render/Heroku/Supabase) ─────
 app.set('trust proxy', 1);
@@ -62,6 +66,7 @@ app.get('/api/borderlessbridgeheart', async (_req, res) => {
 app.use('/api/submissions', submissionsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/settings', settingsRouter);
+app.use('/api/google', googleAuthRouter);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {

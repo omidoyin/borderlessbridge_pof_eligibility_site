@@ -13,8 +13,8 @@ const brevoClient = axios.create({
 });
 
 const FROM_NAME  = process.env.EMAIL_FROM_NAME  || 'BorderlessBridge';
-const FROM_EMAIL = process.env.EMAIL_FROM       || 'noreply@borderlessbridge.com';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL     || process.env.EMAIL_FROM || 'admin@borderlessbridge.com';
+const FROM_EMAIL = process.env.EMAIL_FROM       || 'borderlessbridgehq@gmail.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL     || process.env.EMAIL_FROM || 'borderlessbridgehq@gmail.com';
 
 // Startup check
 if (process.env.BREVO_API_KEY) {
@@ -306,9 +306,9 @@ async function sendBookingConfirmationEmail({ fullName, email, phone, bookedDate
 
 // ── 4. Admin Booking Alert — sent to team when new booking is made ─────────────
 /**
- * @param {{ fullName: string, email: string, phone: string, bookedDate: string, bookedTime: string, businessRole?: string, packageChoice?: string, startTimeline?: string, googleMeetLink?: string }} params
+ * @param {{ to?: string, fullName: string, email: string, phone: string, bookedDate: string, bookedTime: string, businessRole?: string, packageChoice?: string, startTimeline?: string, googleMeetLink?: string, calendarError?: string }} params
  */
-async function sendAdminBookingAlert({ fullName, email, phone, bookedDate, bookedTime, businessRole, packageChoice, startTimeline, googleMeetLink }) {
+async function sendAdminBookingAlert({ to, fullName, email, phone, bookedDate, bookedTime, businessRole, packageChoice, startTimeline, googleMeetLink, calendarError }) {
   const d = new Date(bookedDate + 'T00:00:00');
   const dateLabel = d.toLocaleDateString('en-NG', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   const [h] = bookedTime.split(':');
@@ -317,9 +317,20 @@ async function sendAdminBookingAlert({ fullName, email, phone, bookedDate, booke
   const h12 = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
   const timeLabel = `${h12}:00 ${suffix} (WAT)`;
 
+  let errorSection = '';
+  if (calendarError) {
+    errorSection = `
+      <div style="background:#fef2f2; border:1px solid #fca5a5; border-radius:10px; padding:16px; margin-bottom:24px;">
+        <h4 style="margin:0 0 8px; color:#991b1b; font-size:14px; font-weight:700;">⚠️ Google Calendar Integration Failed</h4>
+        <p style="margin:0; color:#7f1d1d; font-size:13px; font-family:monospace; word-break:break-all; line-height:1.5;">${calendarError}</p>
+      </div>
+    `;
+  }
+
   const html = emailWrapper(`
     ${brandHeader('New Strategy Call Booked 📞', 'A client has booked a call')}
     <div style="padding:40px 30px;">
+      ${errorSection}
       <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:24px; margin-bottom:24px;">
         <h3 style="margin:0 0 16px; font-size:13px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:1px;">Client Details</h3>
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
@@ -338,11 +349,16 @@ async function sendAdminBookingAlert({ fullName, email, phone, bookedDate, booke
     ${brandFooter()}
   `);
 
-  const text = `New Booking Alert!\n\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nDate: ${dateLabel}\nTime: ${timeLabel}\n${businessRole ? `Role: ${businessRole}\n` : ''}${packageChoice ? `Package: ${packageChoice}\n` : ''}${startTimeline ? `Start: ${startTimeline}\n` : ''}${googleMeetLink ? `Meet: ${googleMeetLink}` : ''}`;
+  let text = `New Booking Alert!\n\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone}\nDate: ${dateLabel}\nTime: ${timeLabel}\n${businessRole ? `Role: ${businessRole}\n` : ''}${packageChoice ? `Package: ${packageChoice}\n` : ''}${startTimeline ? `Start: ${startTimeline}\n` : ''}${googleMeetLink ? `Meet: ${googleMeetLink}` : ''}`;
+  if (calendarError) {
+    text = `⚠️ GOOGLE CALENDAR ERROR:\n${calendarError}\n\n` + text;
+  }
 
   await sendEmail({
-    to: ADMIN_EMAIL,
-    subject: `📞 New Call Booked: ${fullName} — ${dateLabel} at ${timeLabel}`,
+    to: to || ADMIN_EMAIL,
+    subject: calendarError 
+      ? `⚠️ Google Calendar Error / New Call Booked: ${fullName}`
+      : `📞 New Call Booked: ${fullName} — ${dateLabel} at ${timeLabel}`,
     html,
     text,
   });

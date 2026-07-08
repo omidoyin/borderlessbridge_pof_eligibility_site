@@ -1,30 +1,9 @@
 const { pool } = require('../database/pool');
-const { google } = require('googleapis');
+const googleCalendarService = require('../services/googleCalendarService');
 const {
   sendBookingConfirmationEmail,
   sendAdminBookingAlert,
 } = require('../services/emailService');
-
-// ── Google Calendar & Meet API client setup ──────────────────────────────────
-const serviceAccountEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim();
-const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n').trim();
-const calendarId = process.env.GOOGLE_CALENDAR_ID?.trim() || 'primary';
-
-let calendarClient = null;
-if (serviceAccountEmail && privateKey) {
-  try {
-    const auth = new google.auth.JWT(
-      serviceAccountEmail,
-      null,
-      privateKey,
-      ['https://www.googleapis.com/auth/calendar']
-    );
-    calendarClient = google.calendar({ version: 'v3', auth });
-    console.log('[Google Calendar] API client successfully initialized.');
-  } catch (err) {
-    console.error('[Google Calendar] Failed to initialize API client:', err.message);
-  }
-}
 
 /**
  * Generates an interactive "Add to Google Calendar" link as a fallback.
@@ -182,83 +161,48 @@ const createBooking = async (req, res) => {
 
   let salesHeadEmail = null;
   try {
+    // Look up either format key (salesHeadEmail or sales_head_email)
     const settingsRes = await pool.query(
-      "SELECT value FROM settings WHERE key = 'sales_head_email'"
+      "SELECT value FROM settings WHERE key IN ('salesHeadEmail', 'sales_head_email') AND value IS NOT NULL"
     );
-    if (settingsRes.rows.length > 0 && settingsRes.rows[0].value) {
+    if (settingsRes.rows.length > 0) {
       salesHeadEmail = settingsRes.rows[0].value.trim();
     }
   } catch (dbErr) {
-    console.error('[DB] Failed to fetch sales_head_email setting:', dbErr.message);
+    console.error('[DB] Failed to fetch salesHeadEmail setting:', dbErr.message);
   }
 
   let googleEventId = null;
   let googleMeetLink = null;
   let inviteUrl = null;
+  let calendarErrorMsg = null;
 
-  // Attempt Google Calendar Integration if Client is Configured
-  if (calendarClient) {
+  // Attempt Google Calendar Integration using the dedicated service
+  if (googleCalendarService.isConfigured()) {
     try {
-      const guestEmails = guests ? guests.split(',').map(e => e.trim()).filter(e => !!e) : [];
-      const [hours, minutes] = bookedTime.split(':').map(Number);
-      
-      const startDateTimeObj = new Date(Date.UTC(
-        ...bookedDate.split('-').map(Number).map((n, idx) => idx === 1 ? n - 1 : n),
-        hours - 1, // WAT to UTC
-        minutes
-      ));
-      const endDateTimeObj = new Date(startDateTimeObj.getTime() + 60 * 60 * 1000); // 1 hour duration
-
-      const attendees = [
-        { email: email },
-        ...guestEmails.map(gEmail => ({ email: gEmail }))
-      ];
-      if (salesHeadEmail) {
-        attendees.push({ email: salesHeadEmail });
-      }
-
-      const event = {
-        summary: `Strategy Call: ${fullName} & BorderlessBridge`,
-        description: `BorderlessBridge Strategy Call\n\n` +
-          `Role in Business: ${businessRole}\n` +
-          `Package Choice: ${packageChoice}\n` +
-          `Timeline to Start: ${startTimeline}\n` +
-          `Video/Audio Guarantee: ${guarantee}\n` +
-          `WhatsApp: ${phone}\n` +
-          `Guests: ${guestEmails.join(', ') || 'None'}`,
-        start: {
-          dateTime: startDateTimeObj.toISOString(),
-          timeZone: 'UTC',
-        },
-        end: {
-          dateTime: endDateTimeObj.toISOString(),
-          timeZone: 'UTC',
-        },
-        attendees,
-        conferenceData: {
-          createRequest: {
-            requestId: `meet-${Date.now()}`,
-            conferenceSolutionKey: {
-              type: 'hangoutsMeet',
-            },
-          },
-        },
-      };
-
-      const gEventRes = await calendarClient.events.insert({
-        calendarId: calendarId,
-        resource: event,
-        conferenceDataVersion: 1, // Required to generate dynamic Google Meet links
+      const gEventRes = await googleCalendarService.createEvent({
+        fullName,
+        email,
+        phone,
+        bookedDate,
+        bookedTime,
+        businessRole,
+        packageChoice,
+        startTimeline,
+        guarantee,
+        guests,
+        salesHeadEmail,
       });
 
-      googleEventId = gEventRes.data.id;
-      googleMeetLink = gEventRes.data.conferenceData?.entryPoints?.find(
-        ep => ep.entryPointType === 'video'
-      )?.uri || null;
-      inviteUrl = gEventRes.data.htmlLink || null;
+      googleEventId = gEventRes.googleEventId;
+      googleMeetLink = gEventRes.googleMeetLink;
+      inviteUrl = gEventRes.inviteUrl;
     } catch (gErr) {
       console.error('[Google Calendar API] Error inserting event:', gErr.message);
+      calendarErrorMsg = gErr.message;
     }
+  } else {
+    calendarErrorMsg = 'Google Calendar Service is not fully configured (missing client ID, client secret, redirect URI, or refresh token).';
   }
 
   // Fallback to Template URL if API client was not used or failed
@@ -329,7 +273,7 @@ const createBooking = async (req, res) => {
       inviteUrl,
     }).catch((err) => console.error('[Email] client booking confirmation failed:', err.message));
 
-    // 2. Alert to admin
+    // 2. Alert to admin (including potential calendar error info)
     sendAdminBookingAlert({
       fullName,
       email,
@@ -340,7 +284,25 @@ const createBooking = async (req, res) => {
       packageChoice,
       startTimeline,
       googleMeetLink: booking.google_meet_link,
+      calendarError: calendarErrorMsg,
     }).catch((err) => console.error('[Email] admin booking alert failed:', err.message));
+
+    // 3. Alert to Sales Head (if configured)
+    if (salesHeadEmail) {
+      sendAdminBookingAlert({
+        to: salesHeadEmail,
+        fullName,
+        email,
+        phone,
+        bookedDate: booking.booked_date,
+        bookedTime: booking.booked_time,
+        businessRole,
+        packageChoice,
+        startTimeline,
+        googleMeetLink: booking.google_meet_link,
+        calendarError: calendarErrorMsg,
+      }).catch((err) => console.error('[Email] sales head booking alert failed:', err.message));
+    }
 
     return res.status(201).json({
       success: true,
