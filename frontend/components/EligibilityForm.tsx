@@ -1,5 +1,6 @@
 "use client";
 import { useState, FormEvent } from "react";
+import Link from "next/link";
 import styles from "./EligibilityForm.module.css";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -516,13 +517,13 @@ export default function EligibilityForm() {
                 </div>
                 <span className={styles.scoreNum}>{eligibility.score}/70</span>
               </div>
-              <button
-                type="button"
-                onClick={() => setStatus("booking")}
+              <Link
+                href={`/book?submissionId=${submissionId}&name=${encodeURIComponent(form.fullName)}&email=${encodeURIComponent(form.email)}&phone=${encodeURIComponent(form.phone)}`}
                 className={`btn-primary ${styles.bookBtn}`}
+                style={{ width: "100%", textDecoration: "none" }}
               >
                 📅 Book a Call with a Specialist
-              </button>
+              </Link>
               <p className={styles.resultNote}>
                 🔒 Your information is handled with strict confidentiality.
               </p>
@@ -695,15 +696,42 @@ export default function EligibilityForm() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="nationality">Nationality</label>
-                <input
-                  id="nationality"
-                  name="nationality"
-                  type="text"
-                  className={`form-control ${errors.nationality ? "error" : ""}`}
-                  placeholder="e.g. Nigerian, Ghanaian"
-                  value={form.nationality}
-                  onChange={handleChange}
-                />
+                <div className="select-wrapper">
+                  <select
+                    id="nationality"
+                    name="nationality"
+                    className={`form-control ${errors.nationality ? "error" : ""}`}
+                    value={form.nationality}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select nationality...</option>
+                    <option value="Nigerian">Nigerian</option>
+                    <option value="Ghanaian">Ghanaian</option>
+                    <option value="Kenyan">Kenyan</option>
+                    <option value="Ugandan">Ugandan</option>
+                    <option value="Tanzanian">Tanzanian</option>
+                    <option value="South African">South African</option>
+                    <option value="Zimbabwean">Zimbabwean</option>
+                    <option value="Zambian">Zambian</option>
+                    <option value="Ethiopian">Ethiopian</option>
+                    <option value="Cameroonian">Cameroonian</option>
+                    <option value="Ivorian">Ivorian</option>
+                    <option value="Senegalese">Senegalese</option>
+                    <option value="Rwandan">Rwandan</option>
+                    <option value="Malawian">Malawian</option>
+                    <option value="Sudanese">Sudanese</option>
+                    <option value="Sierra Leonean">Sierra Leonean</option>
+                    <option value="Gambian">Gambian</option>
+                    <option value="Liberian">Liberian</option>
+                    <option value="Beninese">Beninese</option>
+                    <option value="Togolese">Togolese</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Pakistani">Pakistani</option>
+                    <option value="Bangladeshi">Bangladeshi</option>
+                    <option value="Filipino">Filipino</option>
+                    <option value="Other">Other (not listed)</option>
+                  </select>
+                </div>
                 {errors.nationality && <span className="form-error">{errors.nationality}</span>}
               </div>
             </div>

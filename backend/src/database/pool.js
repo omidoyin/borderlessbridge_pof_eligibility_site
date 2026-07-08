@@ -87,18 +87,36 @@ async function pingDatabase() {
   // Create bookings table
   await pool.query(`
     CREATE TABLE IF NOT EXISTS bookings (
-      id           SERIAL PRIMARY KEY,
-      submission_id INT REFERENCES submissions(id) ON DELETE SET NULL,
-      full_name    VARCHAR(100) NOT NULL,
-      email        VARCHAR(100) NOT NULL,
-      phone        VARCHAR(20)  NOT NULL,
-      booked_date  DATE         NOT NULL,
-      booked_time  VARCHAR(10)  NOT NULL,
-      status       VARCHAR(20)  NOT NULL DEFAULT 'pending',
-      notes        TEXT,
-      created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      id               SERIAL PRIMARY KEY,
+      submission_id    INT REFERENCES submissions(id) ON DELETE SET NULL,
+      full_name        VARCHAR(100) NOT NULL,
+      email            VARCHAR(100) NOT NULL,
+      phone            VARCHAR(20)  NOT NULL,
+      booked_date      DATE         NOT NULL,
+      booked_time      VARCHAR(10)  NOT NULL,
+      status           VARCHAR(20)  NOT NULL DEFAULT 'pending',
+      notes            TEXT,
+      business_role    VARCHAR(100),
+      package_choice   VARCHAR(100),
+      start_timeline   VARCHAR(100),
+      guarantee        VARCHAR(100),
+      guests           TEXT,
+      google_event_id  VARCHAR(255),
+      google_meet_link VARCHAR(512),
+      created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(booked_date, booked_time)
     );
+  `);
+
+  // Ensure new columns exist on existing databases
+  await pool.query(`
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS business_role VARCHAR(100);
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS package_choice VARCHAR(100);
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS start_timeline VARCHAR(100);
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS guarantee VARCHAR(100);
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS guests TEXT;
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS google_event_id VARCHAR(255);
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS google_meet_link VARCHAR(512);
   `);
 
   await pool.query(`
@@ -106,6 +124,15 @@ async function pingDatabase() {
       id INT PRIMARY KEY,
       last_ping TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       counter INT DEFAULT 0
+    );
+  `);
+
+  // Create settings table
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS settings (
+      key VARCHAR(100) PRIMARY KEY,
+      value TEXT,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `);
 

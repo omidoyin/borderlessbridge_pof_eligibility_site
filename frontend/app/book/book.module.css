@@ -1,0 +1,542 @@
+.section {
+  padding: 4rem 0 6rem;
+  background: var(--cream);
+  min-height: calc(100vh - 120px);
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(234, 88, 12, 0), var(--gold), rgba(234, 88, 12, 0));
+}
+
+.bookingCard {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.bookingHeader {
+  background: var(--cream-dark);
+  padding: 2.25rem 2rem 1.75rem;
+  border-bottom: 4px solid var(--gold);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bookingTitle {
+  font-family: var(--font-sans);
+  font-size: 1.8rem;
+  font-weight: 850;
+  color: var(--navy);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.bookingSub {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.bookingSection {
+  padding: 2rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.bookingSection:last-of-type {
+  border-bottom: none;
+}
+
+.bookingLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Date Selection Grid */
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  gap: 0.75rem;
+}
+
+.dateBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1rem 0.5rem;
+  border-radius: 14px;
+  border: 1.5px solid var(--gray-200);
+  background: var(--cream-dark);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
+
+.dateBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--navy);
+  transform: translateY(-1px);
+}
+
+.dateBtnActive {
+  border-color: var(--gold) !important;
+  background: var(--gold-pale) !important;
+  color: var(--navy) !important;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  font-weight: 700;
+}
+
+.dateBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dateBtnDay {
+  font-weight: 700;
+  color: inherit;
+}
+
+.dateBtnSlots {
+  font-size: 0.72rem;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.dateBtnFull {
+  font-size: 0.72rem;
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Time Slot Grid */
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.slotBtn {
+  padding: 0.85rem 0.5rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--gray-200);
+  background: var(--cream-dark);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.slotBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+  color: var(--navy);
+}
+
+.slotBtnActive {
+  border-color: var(--gold) !important;
+  background: var(--gold) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+}
+
+.slotBtnTaken {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* Confirm Details Form layout */
+.formHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-200);
+  padding: 1.5rem 2rem;
+  background: var(--cream-dark);
+}
+
+.formHeaderTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0;
+}
+
+.slotPillRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.slotPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  background: var(--navy-light);
+  border: 1px solid var(--gray-200);
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formFullWidth {
+  grid-column: span 2;
+}
+
+@media (max-width: 520px) {
+  .formFullWidth {
+    grid-column: span 1;
+  }
+}
+
+/* Country Phone Input Combo */
+.phoneInputWrapper {
+  display: flex;
+  position: relative;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.phoneInputWrapper:focus-within {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1);
+}
+
+.flagSelector {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--cream-dark);
+  padding: 0 0.85rem;
+  border-right: 1.5px solid var(--gray-200);
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.flagEmoji {
+  font-size: 1.2rem;
+}
+
+.phoneInput {
+  flex: 1;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  color: var(--navy);
+  background: transparent;
+}
+
+/* Guests dynamic list */
+.guestList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.guestInputRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.addGuestBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  transition: color 0.18s ease;
+}
+
+.addGuestBtn:hover {
+  color: var(--gold-light);
+}
+
+.removeGuestBtn {
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--red);
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.removeGuestBtn:hover {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.bookingError {
+  margin: 1.5rem 2rem 0;
+  padding: 0.9rem 1.1rem;
+  background: rgba(220, 38, 38, 0.05);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--red);
+  line-height: 1.5;
+}
+
+.bookingActions {
+  padding: 1.75rem 2rem;
+  background: var(--cream-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--gray-200);
+}
+
+.backBtn {
+  color: var(--gray-600);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  transition: all 0.18s ease;
+  border: 1px solid transparent;
+}
+
+.backBtn:hover {
+  color: var(--navy);
+  background: var(--navy-light);
+  border-color: var(--gray-200);
+}
+
+.confirmBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gold);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.25);
+  transition: all 0.22s ease;
+  cursor: pointer;
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+}
+
+.confirmBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Booking Confirmed State */
+.confirmedCard {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--green);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.confirmedIconWrap {
+  width: 80px;
+  height: 80px;
+  background: var(--green-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+}
+
+.confirmedTitle {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 850;
+  color: var(--navy);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.confirmedSub {
+  font-size: 1.05rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+  max-width: 440px;
+  margin: 0;
+}
+
+.bookingSummary {
+  width: 100%;
+  background: var(--cream-dark);
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 0.5rem 0;
+  text-align: left;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 0.6rem;
+}
+
+.summaryRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.summaryLabel {
+  font-weight: 600;
+  color: var(--gray-400);
+}
+
+.summaryValue {
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.confirmedNote {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.calendarBtn {
+  margin-top: 0.5rem;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--navy);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  transition: all 0.22s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.calendarBtn:hover {
+  background: #1e293b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.meetLinkPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  color: var(--green);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.meetLinkPill a {
+  text-decoration: underline;
+}
+
+.termsText {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.termsText a {
+  text-decoration: underline;
+  font-weight: 600;
+  color: var(--gray-600);
+}

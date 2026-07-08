@@ -1,5 +1,9 @@
 const { body, validationResult } = require('express-validator');
 const { pool } = require('../database/pool');
+const {
+  sendSubmissionReceivedEmail,
+  sendAdminNewSubmissionAlert,
+} = require('../services/emailService');
 
 // ── Validation rules ─────────────────────────────────────────────────────────
 const submissionValidationRules = [
@@ -186,10 +190,41 @@ Status: New`;
       ]
     );
 
+    // ── Fire-and-forget emails (don't block the response) ──────────────────
+    const submissionIdForEmail = rows[0].id;
+
+    // 1. Confirmation email to applicant
+    sendSubmissionReceivedEmail({
+      fullName,
+      email,
+      destination,
+      visaType,
+      priority,
+    }).catch((err) => console.error('[Email] applicant confirmation failed:', err.message));
+
+    // 2. Alert email to admin/team
+    sendAdminNewSubmissionAlert({
+      fullName,
+      email,
+      phone,
+      nationality,
+      destination,
+      visaType,
+      timeline: readableTimeline,
+      accessToFunds: readableAccess,
+      pofAmount: pofAmount || '',
+      lettersReceived: lettersDisplay,
+      priorRefusal,
+      heardFrom,
+      priority,
+      score,
+      summary,
+    }).catch((err) => console.error('[Email] admin alert failed:', err.message));
+
     return res.status(201).json({
       success: true,
       message: 'Eligibility assessment submitted successfully.',
-      id: rows[0].id,
+      id: submissionIdForEmail,
     });
   } catch (err) {
     console.error('[DB] createSubmission error:', err.message);

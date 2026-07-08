@@ -7,7 +7,6 @@ import OfferSection from "@/components/OfferSection";
 import RiskReversal from "@/components/RiskReversal";
 import PreCloseSection from "@/components/PreCloseSection";
 import EligibilityForm from "@/components/EligibilityForm";
-import StickyBottomCTA from "@/components/StickyBottomCTA";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -41,14 +40,8 @@ export default function Home() {
         <EligibilityForm />
       </main>
 
-
       <Footer />
-
-      {/* Sticky bottom CTA bar */}
-      <StickyBottomCTA />
-
-      {/* Spacer so content isn't hidden behind sticky bar */}
-      <div className="sticky-spacer" aria-hidden />
     </>
   );
 }
+

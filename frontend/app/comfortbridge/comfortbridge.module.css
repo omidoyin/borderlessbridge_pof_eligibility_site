@@ -612,3 +612,97 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Settings & Tabs Styles */
+.headerTabs {
+  display: flex;
+  gap: 0.35rem;
+  background: rgba(5, 8, 17, 0.4);
+  padding: 0.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+}
+
+.tabButton {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--gray-400);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.activeTabButton {
+  background: var(--gold);
+  color: #050811;
+}
+
+.settingsSection {
+  padding: 0.5rem;
+}
+
+.settingsCard {
+  background: var(--cream-dark);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settingsTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.settingsDescription {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  margin-top: -0.5rem;
+}
+
+.settingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.settingLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.settingInput {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: rgba(5, 8, 17, 0.4);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--navy);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.settingInput:focus {
+  border-color: var(--gold);
+}
+
+.settingHelp {
+  font-size: 0.72rem;
+  color: var(--gray-400);
+  line-height: 1.35;
+}
+
+.settingsActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}

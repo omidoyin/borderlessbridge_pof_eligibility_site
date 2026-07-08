@@ -47,6 +47,12 @@ export default function ComfortBridgeDashboard() {
   const [savingNotes, setSavingNotes] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Tabs & settings state
+  const [activeTab, setActiveTab] = useState<"leads" | "settings">("leads");
+  const [salesHeadEmail, setSalesHeadEmail] = useState("");
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [loadingSettings, setLoadingSettings] = useState(false);
+
   // Fetch all submissions from backend
   const fetchSubmissions = async () => {
     try {
@@ -70,8 +76,50 @@ export default function ComfortBridgeDashboard() {
     }
   };
 
+  // Fetch all settings from backend
+  const fetchSettings = async () => {
+    try {
+      setLoadingSettings(true);
+      const res = await fetch(`${API_URL}/api/settings`);
+      if (!res.ok) throw new Error("Failed to load settings");
+      const json = await res.json();
+      if (json.success && json.settings) {
+        setSalesHeadEmail(json.settings.sales_head_email || "");
+      }
+    } catch (err) {
+      console.error("[Dashboard] fetchSettings error:", err);
+    } finally {
+      setLoadingSettings(false);
+    }
+  };
+
+  // Save settings to backend
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    try {
+      const res = await fetch(`${API_URL}/api/settings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sales_head_email: salesHeadEmail }),
+      });
+      if (!res.ok) throw new Error("Failed to update settings");
+      const json = await res.json();
+      if (json.success) {
+        alert("Settings saved successfully!");
+      } else {
+        throw new Error(json.message || "Unknown error saving settings");
+      }
+    } catch (err: any) {
+      console.error("[Dashboard] saveSettings error:", err);
+      alert(err.message || "Failed to save settings. Please try again.");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
   useEffect(() => {
     fetchSubmissions();
+    fetchSettings();
   }, []);
 
   // Update lead status
@@ -219,216 +267,282 @@ export default function ComfortBridgeDashboard() {
         <header className={styles.header}>
           <div className={styles.titleGroup}>
             <span className="eyebrow eyebrow-green">Admin Hub</span>
-            <h1 className={styles.title}>ComfortBridge Leads</h1>
-            <p className={styles.subtitle}>Click any lead below to view full details</p>
+            <h1 className={styles.title}>ComfortBridge Dashboard</h1>
+            <p className={styles.subtitle}>
+              {activeTab === "leads" ? "Click any lead below to view full details" : "Configure global settings"}
+            </p>
           </div>
-          <div className={styles.actions}>
+          <div className={styles.headerTabs}>
             <button
-              onClick={fetchSubmissions}
-              className="btn-primary"
-              style={{
-                width: "100%",
-                padding: "0.45rem 1rem",
-                fontSize: "0.8rem",
-                borderRadius: "6px",
-                boxShadow: "none"
-              }}
+              onClick={() => setActiveTab("leads")}
+              className={`${styles.tabButton} ${activeTab === "leads" ? styles.activeTabButton : ""}`}
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: "4px" }}>
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-              </svg>
-              Refresh Leads
+              Leads
+            </button>
+            <button
+              onClick={() => setActiveTab("settings")}
+              className={`${styles.tabButton} ${activeTab === "settings" ? styles.activeTabButton : ""}`}
+            >
+              Settings
             </button>
           </div>
+          {activeTab === "leads" && (
+            <div className={styles.actions}>
+              <button
+                onClick={fetchSubmissions}
+                className="btn-primary"
+                style={{
+                  width: "100%",
+                  padding: "0.45rem 1rem",
+                  fontSize: "0.8rem",
+                  borderRadius: "6px",
+                  boxShadow: "none"
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: "4px" }}>
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                </svg>
+                Refresh Leads
+              </button>
+            </div>
+          )}
         </header>
 
-        {/* Stats Grid - Small Metrics for Mobile */}
-        <section className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel}>Total</span>
-            <span className={styles.statNumber}>{totalLeads}</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel} style={{ color: "var(--red)" }}>High</span>
-            <span className={styles.statNumber} style={{ color: "var(--red)" }}>{highIntentLeads}</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel} style={{ color: "var(--green)" }}>Cont.</span>
-            <span className={styles.statNumber} style={{ color: "var(--green)" }}>{contactedLeads}</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statLabel} style={{ color: "#a78bfa" }}>Conv.</span>
-            <span className={styles.statNumber} style={{ color: "#a78bfa" }}>{convertedLeads}</span>
-          </div>
-        </section>
+        {activeTab === "leads" && (
+          <>
+            {/* Stats Grid - Small Metrics for Mobile */}
+            <section className={styles.statsGrid}>
+              <div className={styles.statCard}>
+                <span className={styles.statLabel}>Total</span>
+                <span className={styles.statNumber}>{totalLeads}</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statLabel} style={{ color: "var(--red)" }}>High</span>
+                <span className={styles.statNumber} style={{ color: "var(--red)" }}>{highIntentLeads}</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statLabel} style={{ color: "var(--green)" }}>Cont.</span>
+                <span className={styles.statNumber} style={{ color: "var(--green)" }}>{contactedLeads}</span>
+              </div>
+              <div className={styles.statCard}>
+                <span className={styles.statLabel} style={{ color: "#a78bfa" }}>Conv.</span>
+                <span className={styles.statNumber} style={{ color: "#a78bfa" }}>{convertedLeads}</span>
+              </div>
+            </section>
 
-        {/* Controls - Tight Mobile Layout */}
-        <section className={styles.controlsCard}>
-          <div className={styles.searchWrapper}>
-            <svg className={styles.searchIcon} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search leads..."
-              className={styles.searchInput}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          <div className={styles.controlsRow}>
-            <div className={styles.filterGroup}>
-              {["all", "high", "medium", "low"].map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPriorityFilter(p)}
-                  className={`${styles.filterBtn} ${priorityFilter === p ? styles.filterBtnActive : ""}`}
-                >
-                  {p === "all" ? "Priority" : p === "medium" ? "Med" : p.charAt(0).toUpperCase() + p.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
+            {/* Controls - Tight Mobile Layout */}
+            <section className={styles.controlsCard}>
+              <div className={styles.searchWrapper}>
+                <svg className={styles.searchIcon} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Search leads..."
+                  className={styles.searchInput}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <div className={styles.controlsRow}>
+                <div className={styles.filterGroup}>
+                  {["all", "high", "medium", "low"].map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPriorityFilter(p)}
+                      className={`${styles.filterBtn} ${priorityFilter === p ? styles.filterBtnActive : ""}`}
+                    >
+                      {p === "all" ? "Priority" : p === "medium" ? "Med" : p.charAt(0).toUpperCase() + p.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          <div className={styles.controlsRow} style={{ borderTop: "1px solid var(--gray-200)", paddingTop: "0.4rem" }}>
-            <div className={styles.filterGroup}>
-              {["all", "new", "contacted", "converted", "archived"].map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setStatusFilter(s)}
-                  className={`${styles.filterBtn} ${statusFilter === s ? styles.filterBtnActive : ""}`}
-                >
-                  {s === "all" ? "Status" : s === "contacted" ? "Cont." : s === "converted" ? "Conv." : s.charAt(0).toUpperCase() + s.slice(1)}
-                </button>
-              ))}
-            </div>
-            <div style={{ fontSize: "0.72rem", color: "var(--gray-400)", fontWeight: "600" }}>
-              Leads: {filteredLeads.length}
-            </div>
-          </div>
-        </section>
+              <div className={styles.controlsRow} style={{ borderTop: "1px solid var(--gray-200)", paddingTop: "0.4rem" }}>
+                <div className={styles.filterGroup}>
+                  {["all", "new", "contacted", "converted", "archived"].map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setStatusFilter(s)}
+                      className={`${styles.filterBtn} ${statusFilter === s ? styles.filterBtnActive : ""}`}
+                    >
+                      {s === "all" ? "Status" : s === "contacted" ? "Cont." : s === "converted" ? "Conv." : s.charAt(0).toUpperCase() + s.slice(1)}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ fontSize: "0.72rem", color: "var(--gray-400)", fontWeight: "600" }}>
+                  Leads: {filteredLeads.length}
+                </div>
+              </div>
+            </section>
 
-        {/* Error Handling */}
-        {error && (
-          <div className="card text-center" style={{ borderColor: "var(--red)", padding: "1.25rem", marginBottom: "1rem" }}>
-            <h3 style={{ color: "var(--red)", fontSize: "0.95rem", marginBottom: "0.25rem" }}>⚠️ Backend Connection Error</h3>
-            <p style={{ color: "var(--gray-400)", fontSize: "0.75rem", marginBottom: "1rem" }}>{error}</p>
-            <button onClick={fetchSubmissions} className="btn-primary" style={{ padding: "0.4rem 1rem", fontSize: "0.75rem" }}>Retry</button>
-          </div>
+            {/* Error Handling */}
+            {error && (
+              <div className="card text-center" style={{ borderColor: "var(--red)", padding: "1.25rem", marginBottom: "1rem" }}>
+                <h3 style={{ color: "var(--red)", fontSize: "0.95rem", marginBottom: "0.25rem" }}>⚠️ Backend Connection Error</h3>
+                <p style={{ color: "var(--gray-400)", fontSize: "0.75rem", marginBottom: "1rem" }}>{error}</p>
+                <button onClick={fetchSubmissions} className="btn-primary" style={{ padding: "0.4rem 1rem", fontSize: "0.75rem" }}>Retry</button>
+              </div>
+            )}
+
+            {/* Loading Spinner */}
+            {loading && <div className={styles.loadingSpinner} />}
+
+            {/* List Card Grid (Strict Mobile List) */}
+            {!loading && !error && (
+              <section className={styles.leadsGrid}>
+                {filteredLeads.length === 0 ? (
+                  <div className={styles.emptyState}>
+                    <h3 className={styles.emptyTitle}>No leads found</h3>
+                    <p style={{ fontSize: "0.78rem" }}>Change filters or search term.</p>
+                  </div>
+                ) : (
+                  filteredLeads.map((lead) => {
+                    const priorityRowClass =
+                      lead.priority?.toLowerCase() === "high"
+                        ? styles.leadRowHigh
+                        : lead.priority?.toLowerCase() === "medium"
+                        ? styles.leadRowMedium
+                        : styles.leadRowLow;
+
+                    const priorityBadgeClass =
+                      lead.priority?.toLowerCase() === "high"
+                        ? styles.badgeHigh
+                        : lead.priority?.toLowerCase() === "medium"
+                        ? styles.badgeMedium
+                        : styles.badgeLow;
+
+                    const statusBadgeClass =
+                      lead.status === "new"
+                        ? styles.badgeNew
+                        : lead.status === "contacted"
+                        ? styles.badgeContacted
+                        : lead.status === "converted"
+                        ? styles.badgeConverted
+                        : lead.status === "archived"
+                        ? styles.badgeArchived
+                        : styles.badgeRejected;
+
+                    const hasLetters = lead.letters_received && lead.letters_received !== "None Yet";
+                    const quoteText = hasLetters
+                      ? `${lead.letters_received?.split(",")[0]} · POF: ${lead.pof_amount || "N/A"}`
+                      : `Needs ${lead.destination} POF Assistance`;
+
+                    return (
+                      <div
+                        key={lead.id}
+                        className={`${styles.leadRow} ${priorityRowClass}`}
+                        onClick={() => handleOpenModal(lead)}
+                      >
+                        {/* Left: Initials Circle */}
+                        <div className={styles.avatar}>
+                          {getInitials(lead.full_name)}
+                        </div>
+
+                        {/* Center: Lead Information */}
+                        <div className={styles.leadInfo}>
+                          <div className={styles.leadMetaRow}>
+                            <span className={styles.leadName}>{lead.full_name}</span>
+                            <span className={styles.leadTime}>
+                              {new Date(lead.created_at).toLocaleDateString(undefined, {
+                                month: "short",
+                                day: "numeric",
+                              })}
+                            </span>
+                          </div>
+                          <div className={styles.leadDetailText}>
+                            <span>
+                              {lead.destination} · {lead.visa_type.charAt(0).toUpperCase() + lead.visa_type.slice(1)} ({formatTimeline(lead.timeline)})
+                            </span>
+                            <span className={styles.leadQuoteText}>{quoteText}</span>
+                          </div>
+                        </div>
+
+                        {/* Right: Status Pill & Fast Action Actions */}
+                        <div className={styles.leadRight}>
+                          <div className={styles.badgeRow}>
+                            <span className={`${styles.badge} ${priorityBadgeClass}`}>
+                              {getPriorityEmoji(lead.priority)}
+                            </span>
+                            <span className={`${styles.badge} ${statusBadgeClass}`}>
+                              {lead.status === "contacted" ? "cont." : lead.status === "converted" ? "conv." : lead.status}
+                            </span>
+                          </div>
+                          
+                          <div className={styles.actionIcons} onClick={(e) => e.stopPropagation()}>
+                            {lead.status === "new" && (
+                              <button
+                                onClick={() => handleQuickContact(lead.id)}
+                                className={styles.iconBtnSuccess}
+                                title="Mark Contacted"
+                              >
+                                ✓
+                              </button>
+                            )}
+                            {lead.status !== "archived" && (
+                              <button
+                                onClick={() => handleQuickArchive(lead.id)}
+                                className={styles.iconBtnArchive}
+                                title="Archive Lead"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })
+                )}
+              </section>
+            )}
+          </>
         )}
 
-        {/* Loading Spinner */}
-        {loading && <div className={styles.loadingSpinner} />}
+        {activeTab === "settings" && (
+          <section className={styles.settingsSection}>
+            <div className={styles.settingsCard}>
+              <h2 className={styles.settingsTitle}>System Settings</h2>
+              <p className={styles.settingsDescription}>
+                Configure global settings for the BorderlessBridge application.
+              </p>
 
-        {/* List Card Grid (Strict Mobile List) */}
-        {!loading && !error && (
-          <section className={styles.leadsGrid}>
-            {filteredLeads.length === 0 ? (
-              <div className={styles.emptyState}>
-                <h3 className={styles.emptyTitle}>No leads found</h3>
-                <p style={{ fontSize: "0.78rem" }}>Change filters or search term.</p>
+              <div className={styles.settingGroup}>
+                <label className={styles.settingLabel} htmlFor="salesHeadEmail">
+                  Sales Head Email Address
+                </label>
+                <input
+                  type="email"
+                  id="salesHeadEmail"
+                  placeholder="e.g. saleshead@borderlessbridge.com"
+                  className={styles.settingInput}
+                  value={salesHeadEmail}
+                  onChange={(e) => setSalesHeadEmail(e.target.value)}
+                />
+                <span className={styles.settingHelp}>
+                  If set, this email address will be included as an attendee in all Google Calendar Strategy Call invites. Clear the field to remove the Sales Head invite.
+                </span>
               </div>
-            ) : (
-              filteredLeads.map((lead) => {
-                const priorityRowClass =
-                  lead.priority?.toLowerCase() === "high"
-                    ? styles.leadRowHigh
-                    : lead.priority?.toLowerCase() === "medium"
-                    ? styles.leadRowMedium
-                    : styles.leadRowLow;
 
-                const priorityBadgeClass =
-                  lead.priority?.toLowerCase() === "high"
-                    ? styles.badgeHigh
-                    : lead.priority?.toLowerCase() === "medium"
-                    ? styles.badgeMedium
-                    : styles.badgeLow;
-
-                const statusBadgeClass =
-                  lead.status === "new"
-                    ? styles.badgeNew
-                    : lead.status === "contacted"
-                    ? styles.badgeContacted
-                    : lead.status === "converted"
-                    ? styles.badgeConverted
-                    : lead.status === "archived"
-                    ? styles.badgeArchived
-                    : styles.badgeRejected;
-
-                const hasLetters = lead.letters_received && lead.letters_received !== "None Yet";
-                const quoteText = hasLetters
-                  ? `${lead.letters_received?.split(",")[0]} · POF: ${lead.pof_amount || "N/A"}`
-                  : `Needs ${lead.destination} POF Assistance`;
-
-                return (
-                  <div
-                    key={lead.id}
-                    className={`${styles.leadRow} ${priorityRowClass}`}
-                    onClick={() => handleOpenModal(lead)}
-                  >
-                    {/* Left: Initials Circle */}
-                    <div className={styles.avatar}>
-                      {getInitials(lead.full_name)}
-                    </div>
-
-                    {/* Center: Lead Information */}
-                    <div className={styles.leadInfo}>
-                      <div className={styles.leadMetaRow}>
-                        <span className={styles.leadName}>{lead.full_name}</span>
-                        <span className={styles.leadTime}>
-                          {new Date(lead.created_at).toLocaleDateString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </span>
-                      </div>
-                      <div className={styles.leadDetailText}>
-                        <span>
-                          {lead.destination} · {lead.visa_type.charAt(0).toUpperCase() + lead.visa_type.slice(1)} ({formatTimeline(lead.timeline)})
-                        </span>
-                        <span className={styles.leadQuoteText}>{quoteText}</span>
-                      </div>
-                    </div>
-
-                    {/* Right: Status Pill & Fast Action Actions */}
-                    <div className={styles.leadRight}>
-                      <div className={styles.badgeRow}>
-                        <span className={`${styles.badge} ${priorityBadgeClass}`}>
-                          {getPriorityEmoji(lead.priority)}
-                        </span>
-                        <span className={`${styles.badge} ${statusBadgeClass}`}>
-                          {lead.status === "contacted" ? "cont." : lead.status === "converted" ? "conv." : lead.status}
-                        </span>
-                      </div>
-                      
-                      <div className={styles.actionIcons} onClick={(e) => e.stopPropagation()}>
-                        {lead.status === "new" && (
-                          <button
-                            onClick={() => handleQuickContact(lead.id)}
-                            className={styles.iconBtnSuccess}
-                            title="Mark Contacted"
-                          >
-                            ✓
-                          </button>
-                        )}
-                        {lead.status !== "archived" && (
-                          <button
-                            onClick={() => handleQuickArchive(lead.id)}
-                            className={styles.iconBtnArchive}
-                            title="Archive Lead"
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                  </div>
-                );
-              })
-            )}
+              <div className={styles.settingsActions}>
+                <button
+                  onClick={handleSaveSettings}
+                  disabled={savingSettings}
+                  className="btn-primary"
+                  style={{
+                    padding: "0.5rem 1.25rem",
+                    fontSize: "0.85rem",
+                    borderRadius: "6px",
+                    boxShadow: "none"
+                  }}
+                >
+                  {savingSettings ? "Saving..." : "Save Settings"}
+                </button>
+              </div>
+            </div>
           </section>
         )}
 
