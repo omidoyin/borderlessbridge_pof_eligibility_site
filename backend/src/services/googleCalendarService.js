@@ -68,10 +68,9 @@ class GoogleCalendarService {
     }
 
     const event = {
-      summary: `Strategy Call: ${fullName} & BorderlessBridge`,
-      description: `BorderlessBridge Strategy Call\n\n` +
-        `Role in Business: ${businessRole}\n` +
-        `Package Choice: ${packageChoice}\n` +
+      summary: `Proof of Funds Consultation: ${fullName} & BorderlessBridge`,
+      description: `BorderlessBridge Proof of Funds Consultation\n\n` +
+       
         `Timeline to Start: ${startTimeline}\n` +
         `Video/Audio Guarantee: ${guarantee}\n` +
         `WhatsApp: ${phone}\n` +

@@ -523,7 +523,7 @@ export default function ComfortBridgeDashboard() {
                   onChange={(e) => setSalesHeadEmail(e.target.value)}
                 />
                 <span className={styles.settingHelp}>
-                  If set, this email address will be included as an attendee in all Google Calendar Strategy Call invites. Clear the field to remove the Sales Head invite.
+                  If set, this email address will be included as an attendee in all Google Calendar Proof of Funds Consultation invites. Clear the field to remove the Sales Head invite.
                 </span>
               </div>
 

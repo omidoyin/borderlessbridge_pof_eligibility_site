@@ -363,9 +363,9 @@ export default function EligibilityForm() {
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <h3 className={styles.confirmedTitle}>Your Call is Booked! 🎉</h3>
+            <h3 className={styles.confirmedTitle}>Consultation Booked! 🎉</h3>
             <p className={styles.confirmedSub}>
-              A BorderlessBridge specialist will call you at the time below. Please keep your phone available.
+              Your Proof of Funds consultation with a BorderlessBridge specialist is scheduled. Please keep your phone available at the scheduled time.
             </p>
             <div className={styles.bookingSummary}>
               <div className={styles.summaryRow}>
@@ -402,7 +402,7 @@ export default function EligibilityForm() {
           <div className={styles.bookingCard}>
             <div className={styles.bookingHeader}>
               <div className={styles.eligibleBadge}>✅ Eligible</div>
-              <h3 className={styles.bookingTitle}>Book Your Strategy Call</h3>
+              <h3 className={styles.bookingTitle}>Book Your Proof of Funds Consultation</h3>
               <p className={styles.bookingSub}>
                 Choose an available date and time below. Mon–Sat, 9 AM – 5 PM (WAT).
               </p>
@@ -706,7 +706,7 @@ export default function EligibilityForm() {
                   >
                     <option value="">Select nationality...</option>
                     <option value="Nigerian">Nigerian</option>
-                    <option value="Ghanaian">Ghanaian</option>
+                    {/* <option value="Ghanaian">Ghanaian</option>
                     <option value="Kenyan">Kenyan</option>
                     <option value="Ugandan">Ugandan</option>
                     <option value="Tanzanian">Tanzanian</option>
@@ -729,7 +729,7 @@ export default function EligibilityForm() {
                     <option value="Pakistani">Pakistani</option>
                     <option value="Bangladeshi">Bangladeshi</option>
                     <option value="Filipino">Filipino</option>
-                    <option value="Other">Other (not listed)</option>
+                    <option value="Other">Other (not listed)</option> */}
                   </select>
                 </div>
                 {errors.nationality && <span className="form-error">{errors.nationality}</span>}

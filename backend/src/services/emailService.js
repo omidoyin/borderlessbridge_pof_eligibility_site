@@ -135,7 +135,7 @@ async function sendSubmissionReceivedEmail({ fullName, email, destination, visaT
       <div style="background:#fffbeb; border-left:4px solid #f59e0b; border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:28px;">
         <p style="margin:0; font-size:14px; color:#78350f;">
           <strong>⚡ What Happens Next?</strong><br>
-          If you are eligible, you'll be redirected to book a strategy call with a BorderlessBridge specialist who will walk you through the next steps.
+          If a suitable Proof of Funds option may be available for your application, you'll be redirected to book a consultation with a BorderlessBridge specialist to discuss your options, pricing, and the next steps.
         </p>
       </div>
 
@@ -214,7 +214,7 @@ async function sendAdminNewSubmissionAlert(params) {
 }
 
 
-// ── 3. Booking Confirmation — sent to client after booking a strategy call ────
+// ── 3. Booking Confirmation — sent to client after booking a Proof of Funds consultation ────
 /**
  * @param {{ fullName: string, email: string, phone: string, bookedDate: string, bookedTime: string, googleMeetLink?: string, inviteUrl?: string }} params
  */
@@ -233,11 +233,11 @@ async function sendBookingConfirmationEmail({ fullName, email, phone, bookedDate
   const timeLabel = `${h12}:00 ${suffix} (WAT)`;
 
   const html = emailWrapper(`
-    ${brandHeader('Strategy Call Confirmed! 🎉', 'Your slot is booked — get ready')}
+    ${brandHeader('Consultation Confirmed! 🎉', 'Your slot is booked — we look forward to speaking with you')}
     <div style="padding:40px 30px;">
       <p style="font-size:16px; color:#334155; margin:0 0 24px;">Hi <strong>${firstName}</strong>,</p>
       <p style="font-size:16px; color:#334155; margin:0 0 28px;">
-        Your strategy call with a BorderlessBridge Proof of Funds specialist is confirmed. Please find the details below.
+        Your Proof of Funds consultation with a BorderlessBridge specialist is confirmed. Please find the details below.
       </p>
 
       <!-- Booking Summary Card -->
@@ -278,7 +278,7 @@ async function sendBookingConfirmationEmail({ fullName, email, phone, bookedDate
           <li>Ensure your <strong>video and microphone are working</strong> before the call.</li>
           <li>Be on time — our specialists operate on a strict schedule.</li>
           <li>Have any relevant documents ready (admission letters, visa refusal notices, etc.).</li>
-          <li>This is a <strong>1-hour strategy session</strong>, so come prepared with questions.</li>
+          <li>This is a <strong>1-hour consultation</strong>, so come prepared with questions.</li>
         </ul>
       </div>
 
@@ -298,9 +298,9 @@ async function sendBookingConfirmationEmail({ fullName, email, phone, bookedDate
     ${brandFooter()}
   `);
 
-  const text = `Strategy Call Confirmed! 🎉\n\nHi ${firstName},\n\nYour BorderlessBridge strategy call is confirmed.\n\nDate: ${dateLabel}\nTime: ${timeLabel}\nName: ${fullName}\nPhone: ${phone}\n${googleMeetLink ? `Google Meet: ${googleMeetLink}\n` : ''}\nPlease ensure your video and microphone are working before the call.\n${inviteUrl ? `\nAdd to Calendar: ${inviteUrl}\n` : ''}\nNeed to reschedule? WhatsApp: +234 913 338 0497\n\n© ${new Date().getFullYear()} BorderlessBridge`;
+  const text = `Proof of Funds Consultation Confirmed! 🎉\n\nHi ${firstName},\n\nYour BorderlessBridge Proof of Funds consultation is confirmed.\n\nDate: ${dateLabel}\nTime: ${timeLabel}\nName: ${fullName}\nPhone: ${phone}\n${googleMeetLink ? `Google Meet: ${googleMeetLink}\n` : ''}\nPlease ensure your video and microphone are working before the call.\n${inviteUrl ? `\nAdd to Calendar: ${inviteUrl}\n` : ''}\nNeed to reschedule? WhatsApp: +234 913 338 0497\n\n© ${new Date().getFullYear()} BorderlessBridge`;
 
-  await sendEmail({ to: email, subject: `📅 Strategy Call Confirmed — ${dateLabel} at ${timeLabel}`, html, text });
+  await sendEmail({ to: email, subject: `📅 Consultation Confirmed — ${dateLabel} at ${timeLabel}`, html, text });
 }
 
 
@@ -328,7 +328,7 @@ async function sendAdminBookingAlert({ to, fullName, email, phone, bookedDate, b
   }
 
   const html = emailWrapper(`
-    ${brandHeader('New Strategy Call Booked 📞', 'A client has booked a call')}
+    ${brandHeader('New Proof of Funds Consultation Booked 📞', 'A client has booked a consultation')}
     <div style="padding:40px 30px;">
       ${errorSection}
       <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:24px; margin-bottom:24px;">

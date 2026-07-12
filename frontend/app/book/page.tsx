@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, FormEvent, Suspense } from "react";
+import { useEffect, useState, useRef, FormEvent, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./book.module.css";
 
@@ -56,14 +56,13 @@ function BookingContent() {
   const [lastName, setLastName] = useState(initialLastName);
   const [email, setEmail] = useState(paramEmail);
   const [phone, setPhone] = useState(paramPhone);
-  const [businessRole, setBusinessRole] = useState("");
-  const [packageChoice, setPackageChoice] = useState("");
   const [startTimeline, setStartTimeline] = useState("");
+  const [availability, setAvailability] = useState<AvailabilityDay[]>([]);
+  const timeSlotsRef = useRef<HTMLDivElement>(null);
+
   const [guarantee, setGuarantee] = useState("");
-  const [guestEmails, setGuestEmails] = useState<string[]>([]);
 
   // Booking details flow state
-  const [availability, setAvailability] = useState<AvailabilityDay[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -92,21 +91,6 @@ function BookingContent() {
     fetchAvailability();
   }, []);
 
-  const handleAddGuest = () => {
-    if (guestEmails.length < 5) {
-      setGuestEmails([...guestEmails, ""]);
-    }
-  };
-
-  const handleRemoveGuest = (index: number) => {
-    setGuestEmails(guestEmails.filter((_, idx) => idx !== index));
-  };
-
-  const handleGuestEmailChange = (index: number, val: string) => {
-    const updated = [...guestEmails];
-    updated[index] = val;
-    setGuestEmails(updated);
-  };
 
   const handleSubmitBooking = async (e: FormEvent) => {
     e.preventDefault();
@@ -120,7 +104,7 @@ function BookingContent() {
       setBookingError("Email address and Phone number are required.");
       return;
     }
-    if (!businessRole || !packageChoice || !startTimeline || !guarantee) {
+    if (!startTimeline || !guarantee) {
       setBookingError("Please answer all qualification questions.");
       return;
     }
@@ -135,11 +119,8 @@ function BookingContent() {
         phone: phone.trim(),
         bookedDate: selectedDate,
         bookedTime: selectedTime,
-        businessRole,
-        packageChoice,
         startTimeline,
         guarantee,
-        guests: guestEmails.filter(email => !!email.trim()).join(","),
       };
 
       const res = await fetch(`${API_URL}/api/bookings`, {
@@ -186,9 +167,9 @@ function BookingContent() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <h2 className={styles.confirmedTitle}>Strategy Call Booked! 🎉</h2>
+        <h2 className={styles.confirmedTitle}>Proof of Funds Consultation Booked! 🎉</h2>
         <p className={styles.confirmedSub}>
-          Your specialist call is scheduled. Please add this event to your calendar and keep your phone available.
+          Your consultation has been scheduled successfully. Please add this appointment to your calendar and keep your phone available at the scheduled time. We look forward to discussing your application, available options, pricing, and processing timeline.
         </p>
 
         <div className={styles.bookingSummary}>
@@ -241,8 +222,11 @@ function BookingContent() {
     <div className={styles.bookingCard}>
       {/* HEADER */}
       <div className={styles.bookingHeader}>
-        <span className="eyebrow eyebrow-green">Specialist Call</span>
-        <h2 className={styles.bookingTitle}>Schedule Your Strategy Session</h2>
+        <span className="eyebrow eyebrow-green">Proof of Funds Consultation</span>
+        <h2 className={styles.bookingTitle}>
+
+          Book a short call to review your application, discuss the most suitable Proof of Funds option, and receive a clear quote and processing timeline.
+        </h2>
         <p className={styles.bookingSub}>
           Select a convenient date and time. Mon–Sat, 9:00 AM – 5:00 PM WAT.
         </p>
@@ -268,7 +252,14 @@ function BookingContent() {
                     key={day.date}
                     type="button"
                     disabled={isFull}
-                    onClick={() => { setSelectedDate(day.date); setSelectedTime(""); }}
+                    onClick={() => {
+                      setSelectedDate(day.date);
+                      setSelectedTime("");
+                      // Scroll to time slots after a short delay to allow render
+                      setTimeout(() => {
+                        timeSlotsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }, 80);
+                    }}
                     className={`${styles.dateBtn} ${selectedDate === day.date ? styles.dateBtnActive : ""} ${isFull ? styles.dateBtnFull : ""}`}
                   >
                     <span className={styles.dateBtnDay}>{formatDateLabel(day.date)}</span>
@@ -281,7 +272,7 @@ function BookingContent() {
           </div>
 
           {selectedDate && selectedDayData && (
-            <div className={styles.bookingSection}>
+            <div className={styles.bookingSection} ref={timeSlotsRef}>
               <p className={styles.bookingLabel}>Select a Time Slot (WAT)</p>
               <div className={styles.slotGrid}>
                 {selectedDayData.allSlots.map((slot) => {
@@ -360,6 +351,9 @@ function BookingContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              <p className={styles.emailHint}>
+                📩 <strong>Please use your Gmail address</strong> — we&apos;ll send a Google Calendar invite with the meeting link directly to your inbox. Using a non-Gmail address may prevent you from receiving the calendar booking.
+              </p>
             </div>
 
             <div className="form-group">
@@ -388,113 +382,57 @@ function BookingContent() {
               </div>
             </div>
 
+            {/* Question 1: Timeline */}
             <div className="form-group">
-              <label className="form-label" htmlFor="businessRole">
-                What&apos;s your role in the business? (We highly recommend ALL key players in the sales/marketing decision-making process to be on the call. Use the &quot;Add guests&quot; button below to add them to the call) *
+              <label className="form-label">
+                1. If we determine a suitable Proof of Funds option for your application, how soon would you like to proceed? *
               </label>
-              <div className="select-wrapper">
-                <select
-                  id="businessRole"
-                  required
-                  className="form-control"
-                  value={businessRole}
-                  onChange={(e) => setBusinessRole(e.target.value)}
-                >
-                  <option value="">Select the best option below</option>
-                  <option value="Owner / Founder">Owner / Founder</option>
-                  <option value="Co-Founder / Director">Co-Founder / Director</option>
-                  <option value="Partner / Decision Maker">Partner / Decision Maker</option>
-                  <option value="Marketing Lead">Marketing Lead</option>
-                  <option value="Sales Lead">Sales Lead</option>
-                  <option value="Representative">Representative</option>
-                  <option value="Other">Other Role</option>
-                </select>
+              <div className={styles.radioGroup}>
+                {[
+                  "Immediately",
+                  "Within 7 days",
+                  "Within 30 days",
+                  "I'm still considering my options",
+                ].map((option) => (
+                  <label key={option} className={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="startTimeline"
+                      value={option}
+                      checked={startTimeline === option}
+                      onChange={(e) => setStartTimeline(e.target.value)}
+                      className={styles.radioInput}
+                    />
+                    <span className={styles.radioCustom} />
+                    {option}
+                  </label>
+                ))}
               </div>
             </div>
 
-            {/* Guest dynamic list */}
+            {/* Question 2: Attendance */}
             <div className="form-group">
-              <button type="button" onClick={handleAddGuest} className={styles.addGuestBtn}>
-                <span>+</span> Add guests
-              </button>
-              {guestEmails.length > 0 && (
-                <div className={styles.guestList}>
-                  {guestEmails.map((guestEmail, index) => (
-                    <div key={index} className={styles.guestInputRow}>
-                      <input
-                        type="email"
-                        placeholder="guest@example.com"
-                        className="form-control"
-                        value={guestEmail}
-                        onChange={(e) => handleGuestEmailChange(index, e.target.value)}
-                      />
-                      <button type="button" onClick={() => handleRemoveGuest(index)} className={styles.removeGuestBtn}>
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="packageChoice">
-                We have packages from as high as ₦1.5M to as low as ₦500K. Depending on your business needs, we would recommend the best solution. Which describes you the best? *
+              <label className="form-label">
+                2. Will you be available for the consultation at the scheduled time? *
               </label>
-              <div className="select-wrapper">
-                <select
-                  id="packageChoice"
-                  required
-                  className="form-control"
-                  value={packageChoice}
-                  onChange={(e) => setPackageChoice(e.target.value)}
-                >
-                  <option value="">Select the best option below</option>
-                  <option value="High Tier (₦1.5M for premium customized setup)">High Tier (₦1.5M setup)</option>
-                  <option value="Medium Tier (₦1.0M for accelerated setup)">Medium Tier (₦1.0M setup)</option>
-                  <option value="Starter Tier (₦500K for standard starter setup)">Starter Tier (₦500K setup)</option>
-                  <option value="Not Sure / Need Advice">Not Sure / Need Consultation</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="startTimeline">
-                If we&apos;re a perfect fit to work together, when are you looking to get started? *
-              </label>
-              <div className="select-wrapper">
-                <select
-                  id="startTimeline"
-                  required
-                  className="form-control"
-                  value={startTimeline}
-                  onChange={(e) => setStartTimeline(e.target.value)}
-                >
-                  <option value="">Select the best option below</option>
-                  <option value="Immediately (Within 7 days)">Immediately (Within 7 days)</option>
-                  <option value="In 1–2 weeks">In 1–2 weeks</option>
-                  <option value="In 3–4 weeks">In 3–4 weeks</option>
-                  <option value="Just researching">Just researching / Exploring</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="guarantee">
-                Time is Money. If your booking is approved, can you guarantee you will show up, ready and prepared to have a conversation with your mic on and your video on? *
-              </label>
-              <div className="select-wrapper">
-                <select
-                  id="guarantee"
-                  required
-                  className="form-control"
-                  value={guarantee}
-                  onChange={(e) => setGuarantee(e.target.value)}
-                >
-                  <option value="">Select the best option below</option>
-                  <option value="Yes, I guarantee I will show up with video and mic on">Yes, I guarantee 100% attendance (video & mic on)</option>
-                  <option value="No, I cannot guarantee video or mic">No, I might have issues with video or mic</option>
-                </select>
+              <div className={styles.radioGroup}>
+                {[
+                  "Yes, I will attend",
+                  "I may need to reschedule if necessary",
+                ].map((option) => (
+                  <label key={option} className={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="guarantee"
+                      value={option}
+                      checked={guarantee === option}
+                      onChange={(e) => setGuarantee(e.target.value)}
+                      className={styles.radioInput}
+                    />
+                    <span className={styles.radioCustom} />
+                    {option}
+                  </label>
+                ))}
               </div>
             </div>
           </div>

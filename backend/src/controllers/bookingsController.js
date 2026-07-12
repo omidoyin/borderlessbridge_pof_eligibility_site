@@ -21,7 +21,7 @@ function generateGoogleCalendarTemplateUrl({
   guests,
   salesHeadEmail,
 }) {
-  const text = encodeURIComponent(`Strategy Call: ${fullName} & BorderlessBridge`);
+  const text = encodeURIComponent(`Proof of Funds Consultation: ${fullName} & BorderlessBridge`);
   
   const [hours, minutes] = bookedTime.split(':').map(Number);
   const startUtc = new Date(Date.UTC(
@@ -37,7 +37,7 @@ function generateGoogleCalendarTemplateUrl({
   const dates = `${formatDateUtc(startUtc)}/${formatDateUtc(endUtc)}`;
   
   const details = encodeURIComponent(
-    `BorderlessBridge Strategy Call\n\n` +
+    `BorderlessBridge Proof of Funds Consultation\n\n` +
     `Role in Business: ${businessRole}\n` +
     `Package describes you best: ${packageChoice}\n` +
     `When looking to start: ${startTimeline}\n` +
