@@ -79,6 +79,12 @@ const submissionValidationRules = [
     .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ max: 1000 }),
+
+  body('budgetRange')
+    .optional({ nullable: true, checkFalsy: true })
+    .trim()
+    .isIn(['above_3_5m', '2_5m_3_5m', '1_5m_2_5m', 'below_1_5m', ''])
+    .withMessage('Invalid budget range option'),
 ];
 
 // ── POST /api/submissions ────────────────────────────────────────────────────
@@ -107,6 +113,7 @@ const createSubmission = async (req, res) => {
     priorRefusal,
     heardFrom,
     additionalInfo,
+    budgetRange,
   } = req.body;
 
   const ipAddress  = req.ip || req.connection?.remoteAddress || null;
@@ -146,11 +153,22 @@ const createSubmission = async (req, res) => {
   const lettersDisplay = hasLetters ? lettersStr : 'no letters yet';
   const refusalDisplay = priorRefusal === 'yes' ? 'have a' : 'have no';
 
+  // Format budget range for display
+  const budgetLabels = {
+    above_3_5m: '₦3.5M – ₦5.5M (or above)',
+    '2_5m_3_5m': '₦2.5M – ₦3.5M',
+    '1_5m_2_5m': '₦1.5M – ₦2.5M',
+    below_1_5m: 'Below ₦1.5M',
+  };
+  const budgetDisplay = (budgetRange && budgetLabels[budgetRange]) || 'Not specified';
+
   const summary = `🔵 Lead Summary
 
 This is a ${destination} ${visaType} visa applicant (${nationality}) who has received ${lettersDisplay} and intends to apply ${readableTimeline}.
 
 The applicant is aware of the required proof of funds (${pofAmount || 'unspecified amount'}) but currently has ${readableAccess} access to the funds, indicating a possible need for financial support guidance.
+
+Budget range: ${budgetDisplay}
 
 They were acquired through ${heardFrom} and ${refusalDisplay} prior visa refusal history.
 
@@ -164,6 +182,7 @@ Visa Type: ${visaType}
 Timeline: ${readableTimeline}
 Admission: ${lettersDisplay}
 POF: ${pofAmount || 'N/A'}
+Budget Range: ${budgetDisplay}
 Access to Funds: ${accessToFunds}
 Source: ${heardFrom}
 Status: New`;

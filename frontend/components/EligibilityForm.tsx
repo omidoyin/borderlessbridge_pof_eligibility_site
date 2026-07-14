@@ -12,6 +12,7 @@ interface FormData {
   destination: string;
   visaType: string;
   timeline: string;
+  budgetRange: string;     // new: package budget qualifier
   knowsPofAmount: string;
   pofAmount: string;       // raw numeric string e.g. "80000000"
   lettersReceived: string[];
@@ -65,6 +66,9 @@ function evaluateEligibility(form: FormData): EligibilityResult {
   const validTimelines = ["within_30_days", "1_3_months", "3_6_months"];
   const hasValidTimeline = validTimelines.includes(form.timeline);
 
+  // Budget gate: only the below-minimum option disqualifies
+  const hasBudget = form.budgetRange !== "below_1_5m";
+
   const eligible =
     !!form.fullName.trim() &&
     !!form.email.trim() &&
@@ -73,6 +77,8 @@ function evaluateEligibility(form: FormData): EligibilityResult {
     !!form.destination &&
     !!form.visaType &&
     hasValidTimeline &&
+    !!form.budgetRange &&
+    hasBudget &&
     form.knowsPofAmount === "yes" &&
     hasValidLetters &&
     form.accessToFunds === "no" &&
@@ -86,13 +92,18 @@ function evaluateEligibility(form: FormData): EligibilityResult {
   else if (form.timeline === "3_6_months") score += 10;
   if (form.priorRefusal === "no") score += 20;
   if (hasValidLetters) score += 20;
+  // Higher budget tiers score higher
+  if (form.budgetRange === "above_3_5m") score += 10;
+  else if (form.budgetRange === "2_5m_3_5m" || form.budgetRange === "1_5m_2_5m") score += 5;
 
   const priority: EligibilityResult["priority"] =
     score >= 50 ? "High Priority" : score >= 30 ? "Medium Priority" : "Standard";
 
   let reason: string | undefined;
   if (!eligible) {
-    if (!hasValidTimeline)
+    if (!hasBudget || form.budgetRange === "below_1_5m")
+      reason = "Our packages start from ₦1.5M. Unfortunately, our service may not be the right fit at your current budget. Feel free to reach out on WhatsApp if you have questions.";
+    else if (!hasValidTimeline)
       reason = "Your intended application date is more than 6 months away. We work with applicants targeting sooner timelines.";
     else if (form.knowsPofAmount !== "yes")
       reason = "You need to already know your Proof of Funds requirement to proceed with our service.";
@@ -146,6 +157,7 @@ export default function EligibilityForm() {
     destination: "",
     visaType: "",
     timeline: "",
+    budgetRange: "",
     knowsPofAmount: "",
     pofAmount: "",
     lettersReceived: [],
@@ -188,6 +200,8 @@ export default function EligibilityForm() {
       e.visaType = "Please select your visa type.";
     if (!form.timeline)
       e.timeline = "Please select your intended application timeline.";
+    if (!form.budgetRange)
+      e.budgetRange = "Please select an option.";
     if (!form.knowsPofAmount)
       e.knowsPofAmount = "Please select an option.";
     if (form.knowsPofAmount === "yes" && !form.pofAmount.trim())
@@ -806,6 +820,33 @@ export default function EligibilityForm() {
             {/* SECTION 3: PROOF OF FUNDS REQUIREMENTS */}
             <div className={styles.formSection}>
               <h3 className={styles.sectionTitle}>3. Proof of Funds Requirements</h3>
+
+              {/* Budget qualifier — gates access to booking */}
+              <div className="form-group">
+                <label className="form-label">
+                  We have packages ranging from <strong>₦1.5M</strong> as high as <strong>₦5.5M</strong>. Which of these best describes your budget?
+                </label>
+                <div className={styles.radioGroup}>
+                  {[
+                    { value: "above_3_5m",   label: "₦3.5M – ₦5.5M (or above)" },
+                    { value: "2_5m_3_5m",    label: "₦2.5M – ₦3.5M" },
+                    { value: "1_5m_2_5m",    label: "₦1.5M – ₦2.5M" },
+                    { value: "below_1_5m",   label: "Below ₦1.5M" },
+                  ].map(({ value, label }) => (
+                    <label key={value} className={styles.radioOption}>
+                      <input
+                        type="radio"
+                        name="budgetRange"
+                        value={value}
+                        checked={form.budgetRange === value}
+                        onChange={handleChange}
+                      />
+                      <span>{label}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.budgetRange && <span className="form-error">{errors.budgetRange}</span>}
+              </div>
 
               <div className="form-group">
                 <label className="form-label">Do you already know the Proof of Funds amount required?</label>

@@ -21,7 +21,8 @@ function generateGoogleCalendarTemplateUrl({
   guests,
   salesHeadEmail,
 }) {
-  const text = encodeURIComponent(`Proof of Funds Consultation: ${fullName} & BorderlessBridge`);
+  const firstName = fullName.trim().split(/\s+/)[0] || fullName.trim();
+  const text = encodeURIComponent(`${firstName} & BorderlessBridge: Proof of Funds (POF) Strategy Call`);
   
   const [hours, minutes] = bookedTime.split(':').map(Number);
   const startUtc = new Date(Date.UTC(
@@ -37,11 +38,9 @@ function generateGoogleCalendarTemplateUrl({
   const dates = `${formatDateUtc(startUtc)}/${formatDateUtc(endUtc)}`;
   
   const details = encodeURIComponent(
-    `BorderlessBridge Proof of Funds Consultation\n\n` +
-    `Role in Business: ${businessRole}\n` +
-    `Package describes you best: ${packageChoice}\n` +
+    `BorderlessBridge Proof of Funds (POF) Strategy Call\n\n` +
+    `Who needs this POF: ${businessRole || 'Not specified'}\n` +
     `When looking to start: ${startTimeline}\n` +
-    `Guarantee: ${guarantee}\n` +
     `Phone: ${phone}\n` +
     `Guests: ${guests || 'None'}\n\n` +
     `Join Google Meet: https://meet.google.com/lookup/borderlessbridge`

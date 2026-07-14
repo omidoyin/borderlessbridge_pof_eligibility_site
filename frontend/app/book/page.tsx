@@ -60,7 +60,24 @@ function BookingContent() {
   const [availability, setAvailability] = useState<AvailabilityDay[]>([]);
   const timeSlotsRef = useRef<HTMLDivElement>(null);
 
+  const [authorityCheck, setAuthorityCheck] = useState("");
+  const [guestEmails, setGuestEmails] = useState<string[]>([""]);  // guest email inputs
   const [guarantee, setGuarantee] = useState("");
+
+  // Show guest email section whenever the answer is NOT "Just me"
+  const needsGuests = authorityCheck !== "" && authorityCheck !== "Just me";
+
+  const handleGuestEmailChange = (index: number, value: string) => {
+    setGuestEmails((prev) => prev.map((e, i) => (i === index ? value : e)));
+  };
+
+  const addGuestEmail = () => {
+    setGuestEmails((prev) => [...prev, ""]);
+  };
+
+  const removeGuestEmail = (index: number) => {
+    setGuestEmails((prev) => prev.filter((_, i) => i !== index));
+  };
 
   // Booking details flow state
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -104,7 +121,7 @@ function BookingContent() {
       setBookingError("Email address and Phone number are required.");
       return;
     }
-    if (!startTimeline || !guarantee) {
+    if (!startTimeline || !authorityCheck || !guarantee) {
       setBookingError("Please answer all qualification questions.");
       return;
     }
@@ -120,7 +137,11 @@ function BookingContent() {
         bookedDate: selectedDate,
         bookedTime: selectedTime,
         startTimeline,
+        businessRole: authorityCheck,
         guarantee,
+        guests: needsGuests
+          ? guestEmails.map((e) => e.trim()).filter(Boolean).join(",")
+          : "",
       };
 
       const res = await fetch(`${API_URL}/api/bookings`, {
@@ -382,38 +403,104 @@ function BookingContent() {
               </div>
             </div>
 
-            {/* Question 1: Timeline */}
+            {/* Question 1: Authority Check */}
             <div className="form-group">
               <label className="form-label">
-                1. If we determine a suitable Proof of Funds option for your application, how soon would you like to proceed? *
+                1. Who are the primary people who need this Proof of Funds? *
+                <span style={{ display: "block", fontWeight: 400, fontSize: "0.82rem", color: "var(--gray-400)", marginTop: "0.3rem", fontStyle: "italic" }}>
+                  (Please ensure everyone who can influence the final decision is available on the call, so we can move fast if the service is the right fit.)
+                </span>
               </label>
-              <div className={styles.radioGroup}>
-                {[
-                  "Immediately",
-                  "Within 7 days",
-                  "Within 30 days",
-                  "I'm still considering my options",
-                ].map((option) => (
-                  <label key={option} className={styles.radioLabel}>
-                    <input
-                      type="radio"
-                      name="startTimeline"
-                      value={option}
-                      checked={startTimeline === option}
-                      onChange={(e) => setStartTimeline(e.target.value)}
-                      className={styles.radioInput}
-                    />
-                    <span className={styles.radioCustom} />
-                    {option}
-                  </label>
-                ))}
+              <div className="select-wrapper">
+                <select
+                  className="form-control"
+                  value={authorityCheck}
+                  onChange={(e) => {
+                    setAuthorityCheck(e.target.value);
+                    setGuestEmails([""]);  // reset guests when answer changes
+                  }}
+                  required
+                >
+                  <option value="">Select who will be on the call...</option>
+                  <option value="Just me">Just me</option>
+                  <option value="Me and my spouse / partner">Me and my spouse / partner</option>
+                  <option value="Me and a parent / guardian">Me and a parent / guardian</option>
+                  <option value="Me and other family members">Me and other family members</option>
+                  <option value="I am applying on behalf of someone else">I am applying on behalf of someone else</option>
+                </select>
               </div>
             </div>
 
-            {/* Question 2: Attendance */}
+            {/* Guest email inputs — shown when more than one person is involved */}
+            {needsGuests && (
+              <div className="form-group">
+                <label className="form-label">
+                  Other attendee email(s)
+                  <span style={{ display: "block", fontWeight: 400, fontSize: "0.82rem", color: "var(--gray-400)", marginTop: "0.25rem" }}>
+                    Add their email address(es) so they receive a calendar invite with the meeting link.
+                  </span>
+                </label>
+                <div className={styles.guestList}>
+                  {guestEmails.map((gEmail, index) => (
+                    <div key={index} className={styles.guestInputRow}>
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder={`Guest ${index + 1} email address`}
+                        value={gEmail}
+                        onChange={(e) => handleGuestEmailChange(index, e.target.value)}
+                        autoComplete="email"
+                      />
+                      {guestEmails.length > 1 && (
+                        <button
+                          type="button"
+                          className={styles.removeGuestBtn}
+                          onClick={() => removeGuestEmail(index)}
+                          title="Remove"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {guestEmails.length < 5 && (
+                    <button
+                      type="button"
+                      className={styles.addGuestBtn}
+                      onClick={addGuestEmail}
+                    >
+                      + Add another person
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Question 2: Timeline to start */}
             <div className="form-group">
               <label className="form-label">
-                2. Will you be available for the consultation at the scheduled time? *
+                2. If we determine a suitable Proof of Funds option for your application, how soon would you like to proceed? *
+              </label>
+              <div className="select-wrapper">
+                <select
+                  className="form-control"
+                  value={startTimeline}
+                  onChange={(e) => setStartTimeline(e.target.value)}
+                  required
+                >
+                  <option value="">Select timeline...</option>
+                  <option value="Immediately">Immediately</option>
+                  <option value="Within 7 days">Within 7 days</option>
+                  <option value="Within 30 days">Within 30 days</option>
+                  <option value="I'm still considering my options">I&apos;m still considering my options</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Question 3: Attendance guarantee */}
+            <div className="form-group">
+              <label className="form-label">
+                3. Will you be available for the consultation at the scheduled time? *
               </label>
               <div className={styles.radioGroup}>
                 {[

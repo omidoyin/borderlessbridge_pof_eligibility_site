@@ -67,12 +67,12 @@ class GoogleCalendarService {
       attendees.push({ email: salesHeadEmail });
     }
 
+    const firstName = fullName.trim().split(/\s+/)[0] || fullName.trim();
     const event = {
-      summary: `Proof of Funds Consultation: ${fullName} & BorderlessBridge`,
-      description: `BorderlessBridge Proof of Funds Consultation\n\n` +
-       
+      summary: `${firstName} & BorderlessBridge: Proof of Funds (POF) Strategy Call`,
+      description: `BorderlessBridge Proof of Funds (POF) Strategy Call\n\n` +
+        `Who needs this POF: ${businessRole || 'Not specified'}\n` +
         `Timeline to Start: ${startTimeline}\n` +
-        `Video/Audio Guarantee: ${guarantee}\n` +
         `WhatsApp: ${phone}\n` +
         `Guests: ${guestEmails.join(', ') || 'None'}`,
       start: {
