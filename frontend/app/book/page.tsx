@@ -10,6 +10,12 @@ interface AvailabilityDay {
   takenSlots: string[];
 }
 
+interface AvailabilityMeta {
+  meetingDuration: number;  // minutes
+  timezone: string;         // IANA timezone e.g. "Africa/Lagos"
+  maxBookingDays: number;
+}
+
 interface BookingConfirmation {
   id: number;
   booked_date: string;
@@ -87,6 +93,13 @@ function BookingContent() {
   const [bookingError, setBookingError] = useState("");
   const [bookingConfirmed, setBookingConfirmed] = useState<BookingConfirmation | null>(null);
 
+  // Dynamic scheduling meta from backend
+  const [meta, setMeta] = useState<AvailabilityMeta>({
+    meetingDuration: 60,
+    timezone: "Africa/Lagos",
+    maxBookingDays: 14,
+  });
+
   // Load availability on component mount
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -96,6 +109,7 @@ function BookingContent() {
         if (res.ok) {
           const data = await res.json();
           setAvailability(data.availability || []);
+          if (data.meta) setMeta(data.meta);
         } else {
           setBookingError("Failed to fetch slots availability.");
         }
@@ -159,12 +173,17 @@ function BookingContent() {
         if (avRes.ok) {
           const avData = await avRes.json();
           setAvailability(avData.availability || []);
+          if (avData.meta) setMeta(avData.meta);
         }
         setSelectedTime("");
         return;
       }
 
       setBookingConfirmed(data.booking);
+      // Update meta if the booking response includes it
+      if (data.booking?.meetingDuration) {
+        setMeta((prev) => ({ ...prev, meetingDuration: data.booking.meetingDuration, timezone: data.booking.timezone || prev.timezone }));
+      }
     } catch (err) {
       setBookingError("Network error. Please check your connection and try again.");
     } finally {
@@ -200,7 +219,7 @@ function BookingContent() {
           </div>
           <div className={styles.summaryRow}>
             <span className={styles.summaryLabel}>⏰ Time</span>
-            <span className={styles.summaryValue}>{formatTime(bookingConfirmed.booked_time)} (WAT)</span>
+            <span className={styles.summaryValue}>{formatTime(bookingConfirmed.booked_time)} ({meta.timezone})</span>
           </div>
           <div className={styles.summaryRow}>
             <span className={styles.summaryLabel}>👤 Name</span>
@@ -249,7 +268,7 @@ function BookingContent() {
           Book a short call to review your application, discuss the most suitable Proof of Funds option, and receive a clear quote and processing timeline.
         </h2>
         <p className={styles.bookingSub}>
-          Select a convenient date and time. Mon–Sat, 9:00 AM – 5:00 PM WAT.
+          Select a convenient date and time. {meta.meetingDuration}-minute sessions — {meta.timezone}.
         </p>
       </div>
 
@@ -294,7 +313,7 @@ function BookingContent() {
 
           {selectedDate && selectedDayData && (
             <div className={styles.bookingSection} ref={timeSlotsRef}>
-              <p className={styles.bookingLabel}>Select a Time Slot (WAT)</p>
+              <p className={styles.bookingLabel}>Select a Time Slot ({meta.timezone})</p>
               <div className={styles.slotGrid}>
                 {selectedDayData.allSlots.map((slot) => {
                   const isTaken = selectedDayData.takenSlots.includes(slot);
@@ -331,7 +350,7 @@ function BookingContent() {
                 ⏰ {formatTime(selectedTime)}
               </span>
               <span className={styles.slotPill}>
-                ⏳ 1h duration
+                ⏳ {meta.meetingDuration >= 60 ? `${Math.floor(meta.meetingDuration / 60)}h${meta.meetingDuration % 60 !== 0 ? ` ${meta.meetingDuration % 60}min` : ""}` : `${meta.meetingDuration}min`}
               </span>
             </div>
           </div>

@@ -136,6 +136,65 @@ async function pingDatabase() {
     );
   `);
 
+  // ── Sales Head Calendar (OAuth tokens) ───────────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS sales_head_calendar (
+      id              SERIAL PRIMARY KEY,
+      google_email    VARCHAR(255) NOT NULL,
+      refresh_token   TEXT        NOT NULL,
+      access_token    TEXT,
+      token_expiry    TIMESTAMP,
+      calendar_id     VARCHAR(255) NOT NULL DEFAULT 'primary',
+      connected_at    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      last_synced_at  TIMESTAMP
+    );
+  `);
+
+  // ── Scheduling Settings (single-row config) ───────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS scheduling_settings (
+      id                    SERIAL PRIMARY KEY,
+      working_days          TEXT    NOT NULL DEFAULT '1,2,3,4,5',
+      working_hours_start   VARCHAR(5) NOT NULL DEFAULT '09:00',
+      working_hours_end     VARCHAR(5) NOT NULL DEFAULT '17:00',
+      meeting_duration      INT     NOT NULL DEFAULT 60,
+      buffer_before         INT     NOT NULL DEFAULT 0,
+      buffer_after          INT     NOT NULL DEFAULT 0,
+      min_notice_hours      INT     NOT NULL DEFAULT 0,
+      max_booking_days      INT     NOT NULL DEFAULT 14,
+      max_meetings_per_day  INT     NOT NULL DEFAULT 8,
+      timezone              VARCHAR(100) NOT NULL DEFAULT 'Africa/Lagos',
+      updated_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  // Seed default scheduling_settings row if not present
+  await pool.query(`
+    INSERT INTO scheduling_settings (
+      id, working_days, working_hours_start, working_hours_end,
+      meeting_duration, buffer_before, buffer_after,
+      min_notice_hours, max_booking_days, max_meetings_per_day, timezone
+    )
+    VALUES (
+      1, '1,2,3,4,5', '09:00', '17:00',
+      60, 0, 0,
+      0, 14, 8, 'Africa/Lagos'
+    )
+    ON CONFLICT (id) DO NOTHING;
+  `);
+
+  // ── Time Off ──────────────────────────────────────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS time_off (
+      id         SERIAL PRIMARY KEY,
+      label      VARCHAR(255) NOT NULL,
+      start_date DATE         NOT NULL,
+      end_date   DATE         NOT NULL,
+      reason     TEXT,
+      created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
   // Ensure row 1 exists in borderlessbridgeheart
   await pool.query(`
     INSERT INTO borderlessbridgeheart (id, last_ping, counter)

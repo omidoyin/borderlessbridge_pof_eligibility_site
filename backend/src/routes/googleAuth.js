@@ -1,5 +1,6 @@
 const express = require('express');
 const { google } = require('googleapis');
+const { initiateOAuth, handleCallback } = require('../controllers/salesHeadOAuthController');
 
 const router = express.Router();
 
@@ -159,5 +160,12 @@ router.get('/callback', async (req, res) => {
     return res.status(500).send('Authentication failed: ' + err.message);
   }
 });
+
+// ── Sales Head Calendar OAuth ─────────────────────────────────────────────────
+// GET /api/google/saleshead/auth  — initiate OAuth for Sales Head calendar
+router.get('/saleshead/auth', initiateOAuth);
+
+// GET /api/google/saleshead/callback  — OAuth callback (exchange code for tokens)
+router.get('/saleshead/callback', handleCallback);
 
 module.exports = router;

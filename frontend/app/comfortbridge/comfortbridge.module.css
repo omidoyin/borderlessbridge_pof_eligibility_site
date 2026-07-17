@@ -706,3 +706,529 @@
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCHEDULING TAB STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Toast Notification ────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: slideInRight 0.3s ease-out;
+  max-width: 360px;
+}
+
+.toastSuccess {
+  background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.toastError {
+  background: linear-gradient(135deg, #7f1d1d 0%, #6b1b1b 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── Scheduling Section Layout ─────────────────────────────────────────────── */
+.schedulingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem;
+}
+
+/* ── Scheduling Card ────────────────────────────────────────────────────────── */
+.schedCard {
+  background: var(--cream-dark);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.schedCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--gray-200);
+  background: rgba(5, 8, 17, 0.25);
+  flex-wrap: wrap;
+}
+
+.schedCardTitle {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  flex: 1;
+}
+
+.schedCardHeader svg {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ── Mini Spinner ───────────────────────────────────────────────────────────── */
+.miniSpinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.calendarLoadingRow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--gray-400);
+}
+
+/* ── Calendar Connected Card ────────────────────────────────────────────────── */
+.calendarConnected {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.calendarStatusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  width: fit-content;
+}
+
+.connectedDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.calendarInfoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(5, 8, 17, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.calendarInfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.calendarInfoLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+
+.calendarInfoValue {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--navy);
+  word-break: break-all;
+}
+
+.calendarActions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.reconnectBtn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition);
+}
+
+.reconnectBtn:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--gold);
+}
+
+.disconnectBtn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  transition: all var(--transition);
+}
+
+.disconnectBtn:hover {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: #f87171;
+}
+
+/* ── Calendar Disconnected Card ─────────────────────────────────────────────── */
+.calendarDisconnected {
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.calendarDisconnectedIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+}
+
+.calendarDisconnectedText {
+  font-size: 0.84rem;
+  color: var(--gray-400);
+  line-height: 1.55;
+  max-width: 420px;
+}
+
+.connectCalendarBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--gold) 0%, #d97706 100%);
+  color: #050811;
+  font-size: 0.88rem;
+  font-weight: 800;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+  letter-spacing: 0.01em;
+}
+
+.connectCalendarBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+}
+
+.calendarFallbackNote {
+  font-size: 0.72rem;
+  color: var(--gray-400);
+  font-style: italic;
+  max-width: 380px;
+  line-height: 1.4;
+}
+
+/* ── Scheduling Form ─────────────────────────────────────────────────────────── */
+.schedForm {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.schedFormRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .schedFormRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.schedFormGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.schedLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-400);
+}
+
+.schedInput {
+  padding: 0.55rem 0.75rem;
+  background: rgba(5, 8, 17, 0.5);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  font-size: 0.84rem;
+  color: var(--navy);
+  outline: none;
+  transition: border-color var(--transition);
+  font-family: inherit;
+}
+
+.schedInput:focus {
+  border-color: var(--gold);
+}
+
+.schedSelect {
+  padding: 0.55rem 2rem 0.55rem 0.75rem;
+  background: rgba(5, 8, 17, 0.5);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  font-size: 0.84rem;
+  color: var(--navy);
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2394a3b8' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  font-family: inherit;
+}
+
+.schedSelect:focus {
+  border-color: var(--gold);
+}
+
+/* ── Working Day Checkboxes ──────────────────────────────────────────────────── */
+.dayCheckboxGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dayCheckbox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  width: 52px;
+  padding: 0.55rem 0.3rem;
+  border-radius: 8px;
+  background: rgba(5, 8, 17, 0.4);
+  border: 1.5px solid var(--gray-200);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.dayCheckbox:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.dayCheckboxActive {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--gold);
+}
+
+.dayCheckboxShort {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-400);
+  line-height: 1;
+}
+
+.dayCheckboxActive .dayCheckboxShort {
+  color: var(--gold);
+}
+
+.dayCheckboxFull {
+  font-size: 0.55rem;
+  color: var(--gray-400);
+  text-align: center;
+}
+
+.dayCheckboxActive .dayCheckboxFull {
+  color: rgba(245, 158, 11, 0.7);
+}
+
+/* ── Save Button ─────────────────────────────────────────────────────────────── */
+.schedSaveBtn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.4rem;
+  background: var(--gold);
+  color: #050811;
+  font-size: 0.85rem;
+  font-weight: 800;
+  border-radius: 7px;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
+}
+
+.schedSaveBtn:hover:not(:disabled) {
+  background: #f59e0b;
+  box-shadow: 0 5px 16px rgba(245, 158, 11, 0.3);
+  transform: translateY(-1px);
+}
+
+.schedSaveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Time Off ─────────────────────────────────────────────────────────────────── */
+.addTimeOffBtn {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: var(--gold);
+  border-radius: 6px;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.addTimeOffBtn:hover {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.addTimeOffForm {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--gray-200);
+  background: rgba(245, 158, 11, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.timeOffList {
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.timeOffEmpty {
+  padding: 2rem 1.25rem;
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.timeOffCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: rgba(5, 8, 17, 0.35);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: border-color var(--transition);
+}
+
+.timeOffCard:hover {
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.timeOffCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.timeOffLabel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.timeOffDates {
+  font-size: 0.76rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.timeOffReason {
+  font-size: 0.72rem;
+  color: var(--gray-400);
+  font-style: italic;
+}
+
+.timeOffDelete {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+
+.timeOffDelete:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #f87171;
+}

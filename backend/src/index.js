@@ -7,6 +7,7 @@ const submissionsRouter = require('./routes/submissions');
 const bookingsRouter = require('./routes/bookings');
 const settingsRouter = require('./routes/settings');
 const googleAuthRouter = require('./routes/googleAuth');
+const salesHeadSchedulingRouter = require('./routes/salesHeadScheduling');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -21,7 +22,7 @@ app.set('trust proxy', 1);
 // ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(cors({
   origin: [FRONTEND_URL, 'http://localhost:3000', 'http://localhost:3001', 'https://borderlessbridge.veleonex.com'],
-  methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
@@ -67,6 +68,7 @@ app.use('/api/submissions', submissionsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/google', googleAuthRouter);
+app.use('/api/scheduling', salesHeadSchedulingRouter);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
