@@ -8,6 +8,7 @@ const bookingsRouter = require('./routes/bookings');
 const settingsRouter = require('./routes/settings');
 const googleAuthRouter = require('./routes/googleAuth');
 const salesHeadSchedulingRouter = require('./routes/salesHeadScheduling');
+const crmRouter = require('./routes/crm');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -69,6 +70,7 @@ app.use('/api/bookings', bookingsRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/google', googleAuthRouter);
 app.use('/api/scheduling', salesHeadSchedulingRouter);
+app.use('/api/crm', crmRouter);
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {

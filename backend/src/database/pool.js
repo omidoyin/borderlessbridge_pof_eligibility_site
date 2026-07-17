@@ -81,6 +81,17 @@ async function pingDatabase() {
     ALTER TABLE submissions ADD COLUMN IF NOT EXISTS notes TEXT;
     ALTER TABLE submissions ADD COLUMN IF NOT EXISTS ip_address VARCHAR(45);
     ALTER TABLE submissions ADD COLUMN IF NOT EXISTS user_agent TEXT;
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS crm_stage VARCHAR(50) DEFAULT 'new_lead';
+    ALTER TABLE submissions ADD COLUMN IF NOT EXISTS assigned_to VARCHAR(100) DEFAULT 'Sales Head';
+  `);
+
+  // Migrate existing status values to crm_stage
+  await pool.query(`
+    UPDATE submissions SET crm_stage = 'new_lead'  WHERE crm_stage IS NULL AND status = 'new';
+    UPDATE submissions SET crm_stage = 'contacted'  WHERE crm_stage IS NULL AND status = 'contacted';
+    UPDATE submissions SET crm_stage = 'paid'       WHERE crm_stage IS NULL AND status = 'converted';
+    UPDATE submissions SET crm_stage = 'lost'       WHERE crm_stage IS NULL AND status = 'archived';
+    UPDATE submissions SET crm_stage = 'new_lead'   WHERE crm_stage IS NULL;
   `);
 
 
@@ -192,6 +203,49 @@ async function pingDatabase() {
       end_date   DATE         NOT NULL,
       reason     TEXT,
       created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  // Ensure new columns/tables exist for Sales Head scheduling
+  await pool.query(`
+    ALTER TABLE sales_head_calendar ADD COLUMN IF NOT EXISTS calendar_name VARCHAR(255);
+  `);
+
+  // ── CRM Tasks ─────────────────────────────────────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_tasks (
+      id             SERIAL PRIMARY KEY,
+      submission_id  INT REFERENCES submissions(id) ON DELETE CASCADE,
+      title          VARCHAR(255) NOT NULL,
+      due_date       DATE,
+      assigned_to    VARCHAR(100) DEFAULT 'Sales Head',
+      priority       VARCHAR(20)  DEFAULT 'medium',
+      status         VARCHAR(20)  DEFAULT 'pending',
+      created_at     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+      completed_at   TIMESTAMP
+    );
+  `);
+
+  // ── CRM Activity Log ──────────────────────────────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_activity (
+      id             SERIAL PRIMARY KEY,
+      submission_id  INT REFERENCES submissions(id) ON DELETE CASCADE,
+      actor          VARCHAR(100) DEFAULT 'Admin',
+      type           VARCHAR(50),
+      description    TEXT NOT NULL,
+      created_at     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  // ── CRM Internal Notes ────────────────────────────────────────────────────────
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS crm_notes (
+      id             SERIAL PRIMARY KEY,
+      submission_id  INT REFERENCES submissions(id) ON DELETE CASCADE,
+      author         VARCHAR(100) DEFAULT 'Admin',
+      content        TEXT NOT NULL,
+      created_at     TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
     );
   `);
 

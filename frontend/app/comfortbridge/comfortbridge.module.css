@@ -675,29 +675,31 @@
 
 .settingLabel {
   font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--navy);
+  font-weight: 700;
+  color: #000000;
 }
 
 .settingInput {
   width: 100%;
   padding: 0.55rem 0.75rem;
-  background: rgba(5, 8, 17, 0.4);
-  border: 1.5px solid var(--gray-200);
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
   border-radius: 6px;
   font-size: 0.85rem;
-  color: var(--navy);
+  color: #000000;
+  font-weight: 500;
   outline: none;
-  transition: border-color var(--transition);
+  transition: all var(--transition);
 }
 
 .settingInput:focus {
   border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
 .settingHelp {
   font-size: 0.72rem;
-  color: var(--gray-400);
+  color: #475569;
   line-height: 1.35;
 }
 
@@ -862,7 +864,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--gray-400);
+  color: #334155;
   flex-shrink: 0;
 }
 
@@ -939,7 +941,7 @@
 
 .calendarDisconnectedText {
   font-size: 0.84rem;
-  color: var(--gray-400);
+  color: #334155;
   line-height: 1.55;
   max-width: 420px;
 }
@@ -968,7 +970,7 @@
 
 .calendarFallbackNote {
   font-size: 0.72rem;
-  color: var(--gray-400);
+  color: #475569;
   font-style: italic;
   max-width: 380px;
   line-height: 1.4;
@@ -1005,45 +1007,49 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--gray-400);
+  color: #000000;
 }
 
 .schedInput {
   padding: 0.55rem 0.75rem;
-  background: rgba(5, 8, 17, 0.5);
-  border: 1.5px solid var(--gray-200);
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
   border-radius: 6px;
   font-size: 0.84rem;
-  color: var(--navy);
+  color: #000000;
+  font-weight: 500;
   outline: none;
-  transition: border-color var(--transition);
+  transition: all var(--transition);
   font-family: inherit;
 }
 
 .schedInput:focus {
   border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
 .schedSelect {
   padding: 0.55rem 2rem 0.55rem 0.75rem;
-  background: rgba(5, 8, 17, 0.5);
-  border: 1.5px solid var(--gray-200);
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
   border-radius: 6px;
   font-size: 0.84rem;
-  color: var(--navy);
+  color: #000000;
+  font-weight: 500;
   outline: none;
   appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%2394a3b8' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23000000' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1rem;
   cursor: pointer;
-  transition: border-color var(--transition);
+  transition: all var(--transition);
   font-family: inherit;
 }
 
 .schedSelect:focus {
   border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
 /* ── Working Day Checkboxes ──────────────────────────────────────────────────── */
@@ -1062,20 +1068,21 @@
   width: 52px;
   padding: 0.55rem 0.3rem;
   border-radius: 8px;
-  background: rgba(5, 8, 17, 0.4);
-  border: 1.5px solid var(--gray-200);
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
 }
 
 .dayCheckbox:hover {
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: rgba(245, 158, 11, 0.5);
 }
 
 .dayCheckboxActive {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(245, 158, 11, 0.12);
   border-color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.1);
 }
 
 .dayCheckboxShort {
@@ -1083,22 +1090,23 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--gray-400);
+  color: #475569;
   line-height: 1;
 }
 
 .dayCheckboxActive .dayCheckboxShort {
-  color: var(--gold);
+  color: #000000;
 }
 
 .dayCheckboxFull {
   font-size: 0.55rem;
-  color: var(--gray-400);
+  color: #64748b;
   text-align: center;
 }
 
 .dayCheckboxActive .dayCheckboxFull {
-  color: rgba(245, 158, 11, 0.7);
+  color: #000000;
+  font-weight: 700;
 }
 
 /* ── Save Button ─────────────────────────────────────────────────────────────── */
@@ -1203,13 +1211,13 @@
 
 .timeOffDates {
   font-size: 0.76rem;
-  color: var(--gold);
-  font-weight: 600;
+  color: #b45309;
+  font-weight: 700;
 }
 
 .timeOffReason {
   font-size: 0.72rem;
-  color: var(--gray-400);
+  color: #475569;
   font-style: italic;
 }
 
@@ -1231,4 +1239,243 @@
 .timeOffDelete:hover {
   background: rgba(239, 68, 68, 0.15);
   border-color: #f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MULTI-CALENDAR SELECTION STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.calendarSelectionColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-end;
+}
+
+.calendarIdSub {
+  font-size: 0.7rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.changeCalSelectionBtn {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 5px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: var(--gold);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.changeCalSelectionBtn:hover {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: var(--gold);
+}
+
+/* ── Calendar Selector Box ────────────────────────────────────────────────── */
+.calendarSelectorBox {
+  background: rgba(5, 8, 17, 0.25);
+  border: 1.5px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.calendarSearchWrapper {
+  position: relative;
+}
+
+.calendarSearchInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #000000;
+  font-weight: 500;
+  outline: none;
+  transition: all var(--transition);
+  font-family: inherit;
+}
+
+.calendarSearchInput:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* ── Calendar List Dropdown ───────────────────────────────────────────────── */
+.calendarListDropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.calendarListDropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+.calendarListDropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.calendarListDropdown::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.2);
+  border-radius: 10px;
+}
+
+.calendarListItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.75rem;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.calendarListItem:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.calendarListItemActive {
+  border-color: var(--gold);
+  background: rgba(245, 158, 11, 0.08);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15);
+}
+
+.calendarListItemHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.calendarItemName {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.calendarListItemActive .calendarItemName {
+  color: var(--gold);
+}
+
+.primaryBadge {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.calendarItemEmail {
+  font-size: 0.7rem;
+  color: #475569;
+  word-break: break-all;
+}
+
+.calendarItemDesc {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 0.1rem;
+}
+
+.calendarEmptyListItem {
+  padding: 1.25rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+  font-style: italic;
+}
+
+/* ── Calendar Selector Action Buttons ─────────────────────────────────────── */
+.calendarSelectorActions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.saveSelectionBtn {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: var(--gold);
+  color: #050811;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+.saveSelectionBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+.saveSelectionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelSelectionBtn {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(100, 116, 139, 0.08);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+  color: var(--gray-400);
+  border-radius: 6px;
+  transition: all var(--transition);
+}
+
+.cancelSelectionBtn:hover {
+  background: rgba(100, 116, 139, 0.15);
+}
+
+/* ── Test Event Button ────────────────────────────────────────────────────── */
+.testEventBtn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--green);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all var(--transition);
+}
+
+.testEventBtn:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--green);
+}
+
+.testEventBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

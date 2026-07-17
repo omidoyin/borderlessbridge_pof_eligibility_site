@@ -76,7 +76,7 @@ async function isConnected() {
  */
 async function getStatus() {
   const { rows } = await pool.query(
-    `SELECT id, google_email, calendar_id, connected_at, last_synced_at
+    `SELECT id, google_email, calendar_id, calendar_name, connected_at, last_synced_at
      FROM sales_head_calendar ORDER BY id DESC LIMIT 1`
   );
   if (rows.length === 0) return { connected: false };
@@ -84,6 +84,7 @@ async function getStatus() {
     connected: true,
     email: rows[0].google_email,
     calendarId: rows[0].calendar_id,
+    calendarName: rows[0].calendar_name || 'Primary',
     connectedAt: rows[0].connected_at,
     lastSyncedAt: rows[0].last_synced_at,
   };
@@ -324,6 +325,84 @@ function buildISOInTimezone(dateStr, hours, minutes, timezone) {
   return new Date(targetUTC).toISOString();
 }
 
+/**
+ * Fetch all calendars from Google Calendar API where the Sales Head has write permissions.
+ */
+async function getWritableCalendars() {
+  const record = await getConnectedRecord();
+  if (!record) throw new Error('No Sales Head calendar connected.');
+
+  const auth = await buildAuthClient(record);
+  const calendar = google.calendar({ version: 'v3', auth });
+
+  const res = await calendar.calendarList.list({
+    minAccessRole: 'writer',
+    showDeleted: false,
+    maxResults: 250,
+  });
+
+  return (res.data.items || []).map(item => ({
+    id: item.id,
+    summary: item.summary || 'Untitled Calendar',
+    description: item.description || '',
+    primary: item.primary || false,
+    timezone: item.timeZone || 'UTC',
+  }));
+}
+
+/**
+ * Update the selected calendar ID and name in the database.
+ */
+async function saveCalendarSelection(calendarId, calendarName) {
+  const record = await getConnectedRecord();
+  if (!record) throw new Error('No Sales Head calendar connected.');
+
+  await pool.query(
+    `UPDATE sales_head_calendar
+     SET calendar_id = $1, calendar_name = $2, last_synced_at = NOW()
+     WHERE id = $3`,
+    [calendarId, calendarName, record.id]
+  );
+}
+
+/**
+ * Creates a test event today on the selected Sales Head calendar.
+ */
+async function createTestEvent() {
+  const record = await getConnectedRecord();
+  if (!record) throw new Error('No Sales Head calendar connected.');
+
+  const auth = await buildAuthClient(record);
+  const calendar = google.calendar({ version: 'v3', auth });
+
+  const now = new Date();
+  const startTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+  const endTime = new Date(startTime.getTime() + 15 * 60 * 1000); // 15 mins duration
+
+  const event = {
+    summary: 'BorderlessBridge Connection Test Event 🚀',
+    description: 'This is a test event created automatically by the BorderlessBridge Admin dashboard to verify your Google Calendar integration connection. You can safely delete this event.',
+    start: {
+      dateTime: startTime.toISOString(),
+      timeZone: 'UTC',
+    },
+    end: {
+      dateTime: endTime.toISOString(),
+      timeZone: 'UTC',
+    },
+  };
+
+  const gEventRes = await calendar.events.insert({
+    calendarId: record.calendar_id,
+    resource: event,
+  });
+
+  return {
+    id: gEventRes.data.id,
+    htmlLink: gEventRes.data.htmlLink,
+  };
+}
+
 module.exports = {
   isConnected,
   getStatus,
@@ -331,4 +410,7 @@ module.exports = {
   disconnect,
   getFreeBusy,
   createEvent,
+  getWritableCalendars,
+  saveCalendarSelection,
+  createTestEvent,
 };

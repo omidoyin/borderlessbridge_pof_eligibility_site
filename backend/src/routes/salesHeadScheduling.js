@@ -9,6 +9,9 @@ const {
   getTimeOff,
   addTimeOff,
   deleteTimeOff,
+  getCalendars,
+  selectCalendar,
+  createTestCalendarEvent,
 } = require('../controllers/salesHeadSchedulingController');
 
 // ── Calendar ──────────────────────────────────────────────────────────────────
@@ -17,6 +20,15 @@ router.get('/status', getCalendarStatus);
 
 // DELETE /api/scheduling/calendar
 router.delete('/calendar', disconnectCalendar);
+
+// GET  /api/scheduling/calendars (Fetch list of writable calendars from Google API)
+router.get('/calendars', getCalendars);
+
+// POST /api/scheduling/calendar (Update the selected calendar ID and name in DB)
+router.post('/calendar', selectCalendar);
+
+// POST /api/scheduling/test-event (Verify calendar access by creating a test event)
+router.post('/test-event', createTestCalendarEvent);
 
 // ── Scheduling Settings ───────────────────────────────────────────────────────
 // GET  /api/scheduling/settings

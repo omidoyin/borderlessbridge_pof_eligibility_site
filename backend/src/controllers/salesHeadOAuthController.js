@@ -8,17 +8,17 @@
 const { google } = require('googleapis');
 const salesHeadCalendarService = require('../services/salesHeadCalendarService');
 
-// The redirect URI specifically for the Sales Head OAuth flow.
-// Must be registered in Google Cloud Console.
-function getSalesHeadRedirectUri() {
-  return process.env.GOOGLE_SALESHEAD_REDIRECT_URI || process.env.GOOGLE_REDIRECT_URI;
-}
+function buildOAuth2Client(req) {
+  const host = req ? (req.headers.host || '') : '';
+  const isLocal = host.includes('localhost') || host.includes('127.0.0.1');
+  const redirectUri = isLocal
+    ? 'http://localhost:4000/api/google/saleshead/callback'
+    : (process.env.GOOGLE_SALESHEAD_REDIRECT_URI || 'https://borderlessbridge-pof-eligibility-site.onrender.com/api/google/saleshead/callback');
 
-function buildOAuth2Client() {
   return new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    getSalesHeadRedirectUri()
+    redirectUri
   );
 }
 
@@ -26,7 +26,7 @@ function buildOAuth2Client() {
 // Redirect to Google OAuth consent screen
 const initiateOAuth = (req, res) => {
   try {
-    const oauth2Client = buildOAuth2Client();
+    const oauth2Client = buildOAuth2Client(req);
     const url = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       prompt: 'consent',   // Always return a refresh token
@@ -60,7 +60,7 @@ const handleCallback = async (req, res) => {
   }
 
   try {
-    const oauth2Client = buildOAuth2Client();
+    const oauth2Client = buildOAuth2Client(req);
     const { tokens } = await oauth2Client.getToken(code);
 
     if (!tokens.refresh_token) {

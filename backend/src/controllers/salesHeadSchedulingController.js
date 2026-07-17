@@ -184,6 +184,48 @@ const deleteTimeOff = async (req, res) => {
   }
 };
 
+// ── GET /api/scheduling/calendars ────────────────────────────────────────────
+const getCalendars = async (req, res) => {
+  try {
+    const calendars = await salesHeadCalendarService.getWritableCalendars();
+    return res.json({ success: true, calendars });
+  } catch (err) {
+    console.error('[Scheduling] getCalendars error:', err.message);
+    return res.status(500).json({ success: false, message: err.message || 'Internal server error.' });
+  }
+};
+
+// ── POST /api/scheduling/calendar ────────────────────────────────────────────
+const selectCalendar = async (req, res) => {
+  const { calendarId, calendarName } = req.body;
+
+  if (!calendarId || !calendarName) {
+    return res.status(422).json({
+      success: false,
+      message: 'calendarId and calendarName are required.',
+    });
+  }
+
+  try {
+    await salesHeadCalendarService.saveCalendarSelection(calendarId, calendarName);
+    return res.json({ success: true, message: 'Calendar selection saved.' });
+  } catch (err) {
+    console.error('[Scheduling] selectCalendar error:', err.message);
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};
+
+// ── POST /api/scheduling/test-event ──────────────────────────────────────────
+const createTestCalendarEvent = async (req, res) => {
+  try {
+    const result = await salesHeadCalendarService.createTestEvent();
+    return res.json({ success: true, message: 'Test event created successfully!', link: result.htmlLink });
+  } catch (err) {
+    console.error('[Scheduling] createTestCalendarEvent error:', err.message);
+    return res.status(500).json({ success: false, message: err.message || 'Internal server error.' });
+  }
+};
+
 module.exports = {
   getCalendarStatus,
   disconnectCalendar,
@@ -192,4 +234,7 @@ module.exports = {
   getTimeOff,
   addTimeOff,
   deleteTimeOff,
+  getCalendars,
+  selectCalendar,
+  createTestCalendarEvent,
 };
